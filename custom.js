@@ -32,13 +32,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var Options = {
-    "unfilter": {
-      "displayname": "Undo some filters of common words",
-      "type": "toggle",
-      "names": ["", ""],
-      "values": [false, true],
-      "default": false
-    },
     "newchat": {
       "displayname": "New Chat Layout (beta)",
       "type": "toggle",
@@ -1030,7 +1023,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
               };
               USEROPTS.adminhat && CLIENT.rank >= 255 ? t = '/a ' + t : USEROPTS.modhat && CLIENT.rank >= Rank.Moderator && (a.modflair = CLIENT.rank),
               CLIENT.rank >= 2 && 0 === t.indexOf('/m ') && (a.modflair = CLIENT.rank, t = t.substring(3));
-              if (get_option("unfilter")) t = t.replace("what","wh﻿at").replace("jarjar","jar﻿jar");
               socket.emit('chatMsg', {
                 msg: t,
                 meta: a
