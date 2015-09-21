@@ -33,7 +33,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
   var Options = {
     "unfilter": {
-      "displayname": "Disable filters",
+      "displayname": "Undo some filters of common words",
       "type": "toggle",
       "names": ["", ""],
       "values": [false, true],
@@ -1635,6 +1635,4 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     console.info("Already initialized, skipping initializing");
     init();
   }
-  
-  $("#settingsbtn").unbind().remove();
 })();
