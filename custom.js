@@ -40,14 +40,14 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       "default": false
     },
     "chatcolors": {
-      "displayname": "Colored Usernames (beta)",
+      "displayname": "Colored Usernames",
       "type": "toggle",
       "names": ["", ""],
       "values": [false, true],
       "default": false
     },
     "thinnames": {
-      "displayname": "Thin Usernames (beta)",
+      "displayname": "Thin Usernames",
       "type": "toggle",
       "names": ["", ""],
       "values": [false, true],
@@ -73,13 +73,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       "names": ["", ""],
       "values": [false, true],
       "default": false
-    },
-    "transparentplayer": {
-      "displayname": "Make Player Transparent, so other objects can show over it",
-      "type": "toggle",
-      "names": ["", ""],
-      "values": [false, true],
-      "default": true
     },
     "dateformat": {
       "displayname": "Preferred Date Format",
@@ -217,6 +210,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         callHandler(name, e);
       }
     }
+    console.log(OriginalCallbacks);
   }
 
   var set_body_class = function (name, enable) {
@@ -1305,7 +1299,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     $("#more-opts").hide();
 
     $('#customcontrols').prepend('<button id="schedulebtn" title="Schedule" class="btn btn-sm btn-default">Nothing scheduled</button>').button();
-    $('#customcontrols').prepend('<button id="settingsbtn" title="Settings" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-list"></span>&nbsp;</button>').button();
+    $('#customcontrols').prepend('<button id="settingsbtn" title="Settings" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-tasks"></span>&nbsp;</button>').button();
     $('#customcontrols').prepend('<button id="ruleslistbtn" title="Rules List" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-tower"></span>&nbsp;</button>').button();
     $('#customcontrols').prepend('<button id="lyricsbtn" title="Lyrics" class="btn btn-sm btn-default" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span></button>').button();
     $('#customcontrols').prepend('<button id="emotelistbtn" title="Emote List" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-picture"></span>&nbsp;</button>').button();
@@ -1585,7 +1579,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
           flashvars: 'embed=1&hostname=localhost&channel=' + e.id + '& eventsCallback=twitchEventCallback&auto_play=true&start_volume=' + Math.floor(100 * VOLUME)
         }
       };
-      if (get_option("transparentplayer")) e.meta.embed.params.wmode = "transparent";
+      if (USEROPTS.wmode_transparent) e.meta.embed.params.wmode = "transparent";
       return TwitchPlayer.__super__.load.call(this, e)
     }
 
@@ -1594,6 +1588,21 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       PLAYER.mediaId = "";
       socket.emit("playerReady");
     }
+  }
+  
+  var init_better_scroll = function () {
+    var check_scroll = function () {
+      var elem = $("#messagebuffer");
+      return elem[0].scrollHeight - elem.scrollTop() - elem.outerHeight() - elem.children().last().height() <= 0
+    }
+    
+    $("#messagebuffer").scroll(function () {
+      SCROLLCHAT = SCROLLCHAT && check_scroll();
+    });
+    $('#messagebuffer').unbind("mouseleave");
+    $('#messagebuffer').mouseleave(function () {
+      SCROLLCHAT = check_scroll();
+    });
   }
 
   var init = function () {
@@ -1616,6 +1625,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     init_timeDisplay();
     init_hidePlayer();
     init_better_player();
+    init_better_scroll();
 
     CUSTOM.init_done = true;
   }
