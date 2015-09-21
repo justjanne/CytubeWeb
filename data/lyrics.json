@@ -1,0 +1,144 @@
+{
+	"type": "container",
+	"children": [
+		{
+			"type": "menu",
+			"title": "Frozen",
+			"children": [
+				{
+					"type": "song",
+					"url": "frozenheart",
+					"title": "Frozen Heart"
+				},
+				{
+					"type": "song",
+					"url": "dywtbas",
+					"title": "Do You Want to Build a Snowman?"
+				},
+				{
+					"type": "song",
+					"url": "ftftif",
+					"title": "For the First Time in Forever"
+				},
+				{
+					"type": "song",
+					"url": "liaod",
+					"title": "Love is an Open Door"
+				},
+				{
+					"type": "song",
+					"url": "letitgo",
+					"title": "Let it Go"
+				},
+				{
+					"type": "song",
+					"url": "rabtp",
+					"title": "Reindeers are Better than People"
+				},
+				{
+					"type": "song",
+					"url": "insummer",
+					"title": "In Summer"
+				},
+				{
+					"type": "song",
+					"url": "ftftifr",
+					"title": "For the First Time in Forever, Reprise"
+				},
+				{
+					"type": "song",
+					"url": "fixerupper",
+					"title": "Fixer-Upper"
+				},
+				{
+					"type": "divider"
+				},
+				{
+					"type": "song",
+					"url": "lts",
+					"title": "Life's Too Short"
+				},
+				{
+					"type": "song",
+					"url": "ltsr",
+					"title": "Life's Too Short, Reprise"
+				},
+				{
+					"type": "divider"
+				},
+				{
+					"type": "song",
+					"url": "swe-ftftif",
+					"title": "SWE: For the First Time in Forever"
+				},
+				{
+					"type": "song",
+					"url": "swe-ftftifr",
+					"title": "SWE: For the First Time in Forever, Reprise"
+				}
+			]
+		},
+		{
+			"type": "menu",
+			"title": "Tangled",
+			"children": [
+				{
+					"type": "song",
+					"url": "wwmlb",
+					"title": "When Will My Life Begin"
+				},
+				{
+					"type": "song",
+					"url": "mkb",
+					"title": "Mother Knows Best"
+				},
+				{
+					"type": "song",
+					"url": "wwmlbr",
+					"title": "When Will My Life Begin, Reprise"
+				},
+				{
+					"type": "song",
+					"url": "igad",
+					"title": "I've Got a Dream"
+				},
+				{
+					"type": "song",
+					"url": "mkbr",
+					"title": "Mother Knows Best, Reprise"
+				},
+				{
+					"type": "song",
+					"url": "istl",
+					"title": "I See the Light"
+				},
+				{
+					"type": "song",
+					"url": "healing",
+					"title": "Healing Incantation"
+				},
+				{
+					"type": "song",
+					"url": "stiw",
+					"title": "Something That I Want"
+				}
+			]
+		},
+		{
+			"type": "menu",
+			"title": "Brave",
+			"children": [
+				{
+					"type": "song",
+					"url": "tts",
+					"title": "Touch the Sky"
+				},
+				{
+					"type": "song",
+					"url": "itoa",
+					"title": "Into the Open Air"
+				}
+			]
+		}
+	]
+}
