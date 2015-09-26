@@ -6,11 +6,13 @@
 
 if (typeof (CUSTOM) === "undefined") CUSTOM = {
   init_done: false,
+  chat_only: false,
   resources: null,
-  mediaType: null,
+  media_type: null,
   volume: 0,
   hidden: false,
   shortSchedule: false,
+  mobile: (window.innerWidth <= 720 && window.innerHeight <= 720),
   debug: false
 };
 
@@ -69,6 +71,20 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     },
     "hideafkicons": {
       "displayname": "Hide AFK icons",
+      "type": "toggle",
+      "names": ["", ""],
+      "values": [false, true],
+      "default": false
+    },
+    "integrated_profile": {
+      "displayname": "Integrate Userprofile with Dropdown",
+      "type": "toggle",
+      "names": ["", ""],
+      "values": [false, true],
+      "default": false
+    },
+    "pmbar_unfocus": {
+      "displayname": "Hide PM windows without new PMs when typing in chatbar",
       "type": "toggle",
       "names": ["", ""],
       "values": [false, true],
@@ -298,6 +314,12 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     if (!CUSTOM.hidden && enabled) hideVideo();
     else if (CUSTOM.hidden && !enabled) unhideVideo();
   }
+  
+  $(window).unbind("resize");
+  $(window).resize(function () {
+    handleWindowResize();
+    CUSTOM.mobile = (window.innerWidth <= 720 && window.innerHeight <= 720);    
+  })
 
   formatChatMessage = function (e, t) {
     var internal_formatChatMessage = function (e, t) {
@@ -411,6 +433,176 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     setVisible("#btn_chan-settings", CLIENT.rank >= 2);
     $("body").addClass("chatOnly");
     handleWindowResize()
+
+    CUSTOM.chat_only = true;
+  }
+
+  var userlist_createProfile = function (elem, userdata) {
+    elem.find(".profile-box.linewrap").unbind().remove();
+
+    var profile = $("<div/>").addClass("profile-box linewrap").appendTo(elem);
+    if (userdata.profile.image) {
+      $("<img/>").addClass("profile-image").attr("src", userdata.profile.image).appendTo(profile);
+    }
+
+    $("<strong/>").text(userdata.name).appendTo(profile);
+
+    if (userdata.meta.ip) {
+      $("<br/>").appendTo(profile);
+      $("<em/>").text(userdata.meta.ip).appendTo(profile);
+    }
+    if (userdata.meta.aliases) {
+      $("<br/>").appendTo(profile);
+      $("<em/>").text("aliases: " + userdata.meta.aliases.join(", ")).appendTo(profile);
+    }
+    $("<hr/>").css("margin-top", "5px").css("margin-bottom", "5px").appendTo(profile);
+    $("<p/>").text(userdata.profile.text).appendTo(profile);
+
+    return profile;
+  }
+
+  var userlist_hoverProfile = function (elem, userdata) {
+    var alignProfile = function (profile, event) {
+      var top = event.clientY + 5;
+      var left = event.clientX;
+      if ($("body").hasClass("synchtube")) {
+        left -= profile.outerWidth();
+      }
+      profile.css("left", left + "px");
+      profile.css("top", top + "px");
+    };
+
+    profile_unbind(elem);
+
+    elem.mouseenter(function (event) {
+      var profile = findUserlistItem(userdata.name).find(".profile-box.linewrap");
+      if (profile) profile.remove();
+      profile = userlist_createProfile(elem, userdata);
+      alignProfile(profile, event);
+    });
+    elem.mousemove(function (event) {
+      var profile = findUserlistItem(userdata.name).find(".profile-box.linewrap");
+      alignProfile(profile, event);
+    });
+    elem.mouseleave(function () {
+      var profile = findUserlistItem(userdata.name).find(".profile-box.linewrap");
+      profile.remove();
+    });
+
+    var clk = function (event) {
+      if (event.shiftKey) return true;
+
+      var elem = findUserlistItem(userdata.name);
+      var dropdown = elem.find(".user-dropdown");
+
+      event.preventDefault();
+      if ("none" == dropdown.css("display")) {
+        $(".user-dropdown").hide();
+        $(document).bind("mouseup.userlist-ddown", function (t) {
+          if (0 === dropdown.has(event.target).length && 0 === elem.parent().has(event.target).length) {
+            dropdown.hide();
+            $(document).unbind("mouseup.userlist-ddown")
+          }
+        });
+        dropdown.show();
+        dropdown.css("top", elem.position().top)
+      } else {
+        dropdown.hide();
+      }
+      return false;
+    };
+
+    elem.click(clk);
+    elem.contextmenu(clk);
+  }
+
+  var profile_unbind = function (elem) {
+    $(elem.children()[1]).unbind("mousemove");
+    $(elem.children()[1]).unbind("mouseenter");
+    $(elem.children()[1]).unbind("mouseleave");
+    elem.unbind("mousemove");
+    elem.unbind("mouseenter");
+    elem.unbind("mouseleave");
+    elem.unbind("contextmenu");
+    elem.unbind("click");
+  }
+
+  var userlist_dropdownProfile = function (elem, userdata) {
+    profile_unbind(elem);
+
+    var clk = function (event) {
+      if (event.shiftKey) return true;
+
+      var elem = findUserlistItem(userdata.name);
+      var dropdown = elem.find(".user-dropdown");
+      var profile = elem.find(".profile-box.linewrap");
+
+      event.preventDefault();
+      if ("none" == dropdown.css("display")) {
+        $(".user-dropdown").hide();
+        $(document).bind("mouseup.userlist-ddown", function (t) {
+          if (0 === dropdown.has(event.target).length && 0 === elem.parent().has(event.target).length) {
+            dropdown.hide();
+            $(document).unbind("mouseup.userlist-ddown")
+          }
+        });
+        $("#userlist .profile-box.linewrap").hide();
+        dropdown.show();
+        profile.show();
+        dropdown.css("top", elem.position().top)
+      } else {
+        dropdown.hide();
+        profile.hide();
+      }
+      return false;
+    };
+
+    var profile = userlist_createProfile(elem, userdata);
+    profile.hide();
+    elem.click(clk);
+    elem.contextmenu(clk);
+  }
+
+  var userlist_profile = function (elem, userdata) {
+    if (!userdata) userdata = elem_to_user(-1, elem);
+
+    if (get_option("integrated_profile")) userlist_dropdownProfile(elem, userdata);
+    else userlist_hoverProfile(elem, userdata);
+  }
+
+  var userlist_applyProfiles = function () {
+    $("#userlist > .userlist_item").each(function (i, elem) {
+      userlist_profile($(elem));
+    });
+  }
+
+  formatUserlistItem = function (div) {
+    var userdata = elem_to_user(-1, div);
+
+    var name = $(div.children()[1]);
+    name.removeClass();
+    name.css("font-style", "");
+    name.addClass(getNameColor(userdata.rank));
+    div.find(".profile-box").remove();
+
+    div.toggleClass("userlist_afk", userdata.afk);
+    div.toggleClass("userlist_muted", userdata.meta.muted);
+    div.toggleClass("userlist_smuted", userdata.meta.smuted);
+
+    userlist_profile(div, userdata);
+
+    var icons = div.children()[0];
+    icons.innerHTML = "";
+    if (userdata.leader) {
+      $("<span/>").addClass("glyphicon glyphicon-star-empty").appendTo(icons);
+    }
+    if (userdata.afk) {
+      name.css("font-style", "italic");
+      $("<span/>").addClass("glyphicon glyphicon-time").appendTo(icons);
+    }
+    if (userdata.icon) {
+      $("<span/>").addClass("glyphicon " + userdata.icon).prependTo(icons);
+    }
   }
 
   var loadExternal = function () {
@@ -418,7 +610,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       var tag = document.createElement("link");
       tag.type = "text/css";
       tag.rel = "stylesheet";
-      tag.href = val.url;
+      tag.href = val.url + "?_=" + (new Date().getTime());
       document.head.appendChild(tag);
       $(tag).ready(function () {
         val.callback.forEach(function (f) { f(); });
@@ -661,7 +853,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
     registerCallback("mediaUpdate", function (e, original) {
       original(e);
-      CUSTOM.mediaType = e.type;
+      CUSTOM.media_type = e.type;
       if (typeof (time_display_time) !== 'undefined') {
         time_display_time.paused = e.paused;
         time_display_time.raw = Math.max(e.currentTime, 0);
@@ -786,7 +978,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   var add_label = function (id, title, hint, callback) {
     if ($('#lbl_' + id).length) { $('#lbl_' + id).unbind().remove(); }
 
-    $('#modflair').before('<span id="lbl_' + id + '" title="' + hint + '" class="pull-right pointer label-default">' + title + '</span>');
+    $('#modflair').before('<span id="lbl_' + id + '" title="' + hint + '" class="custom-label pull-right pointer label-default">' + title + '</span>');
 
     $('#lbl_' + id).click(function () {
       var btn = $('#lbl_' + id);
@@ -803,7 +995,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   var init_hidePlayer = function () {
     Callbacks.hidePlayer = hidePlayer;
     hidePlayer = function () {
-      if (get_option("hidetwitchplayerinmenu") && CUSTOM.mediaType === "tw")
+      if (get_option("hidetwitchplayerinmenu") && CUSTOM.media_type === "tw")
         Callbacks.hidePlayer
     }
   }
@@ -853,7 +1045,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       }
     });
 
-    add_button("capture_list", "C", "Show all messages that pinged you", function () {
+    add_button("capture_list", "Capture List", function () {
       CAPTURELIST.show();
       return false;
     });
@@ -861,7 +1053,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
   var update_clock = function () {
     if (typeof (moment) !== "undefined") {
-      var time = $("#btn_clock #clock_time");
+      var time = $("#lbl_clock #clock_time");
       time.html(moment().utc().format(get_option("timeformat")));
     } else {
       setTimeout(update_clock, 1000);
@@ -869,8 +1061,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var init_clock = function () {
-    add_button("clock", "", "", function () { return false; });
-    $('#btn_clock').html("<span id='clock_time'>0:00</span> GMT");
+    add_label("clock", "", "", function () { return false; });
+    $('#lbl_clock').html("<span id='clock_time'>0:00</span> GMT");
 
     update_clock();
 
@@ -1132,14 +1324,18 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
           time: data[1],
           region: data[2]
         };
-        return '<tr><td class="vertical-middle">' + event.title + '</td><td class="vertical-middle">' + (event.region || "") + '</td><td class="text-left vertical-middle">' + render_nicetime(event.time) + '</td><td class="text-left vertical-middle">' + render_difftime(event.time) + '</td></tr>';
+        if (CUSTOM.mobile) return '<tr><td class="vertical-middle">' + event.title + (event.region ?  ' [' + event.region + ']' : "") + '</td><td class="text-left vertical-middle">' + render_nicetime(event.time) + '<br>' + render_difftime(event.time) + '</td></tr>';
+        else return '<tr><td class="vertical-middle">' + event.title + '</td><td class="vertical-middle">' + (event.region || "") + '</td><td class="text-left vertical-middle">' + render_nicetime(event.time) + '</td><td class="text-left vertical-middle">' + render_difftime(event.time) + '</td></tr>';
       }
+      
+      if (CUSTOM.mobile) $(this.modal).find("thead").html("<tr><th>Event</th>><th>Time</th></tr>");
+      else $(this.modal).find("thead").html("<tr><th>Event</th><th>Region</th><th>Time</th><th>Countdown</th></tr>");
 
       this.table.innerHTML = CUSTOM.resources.schedule.data.filter(is_in_future).map(render_event).reduce(function (a, b) { return a + b; }, "");
     }
 
     $("#schedulelist").unbind().remove();
-    $("#emotelist").after('<div style="display: none;" id="schedulelist" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade"><div class="modal-dialog modal-dialog-fluid"><div class="modal-content"><div class="modal-header"><button data-dismiss="modal" aria-hidden="true" class="close">×</button><h4>Schedule</h4></div><div class="modal-body"><table class="table table-striped table-condensed"><thead><tr><th>Event</th><th>Region</th><th>Time</th><th>Countdown</th></tr></thead><tbody></table></div><div class="modal-footer"></div></div></div></div>');
+    $("#emotelist").after('<div style="display: none;" id="schedulelist" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade"><div class="modal-dialog modal-dialog-fluid"><div class="modal-content"><div class="modal-header"><button data-dismiss="modal" aria-hidden="true" class="close">×</button><h4>Schedule</h4></div><div class="modal-body"><table class="table table-striped table-condensed"><thead></thead><tbody></table></div><div class="modal-footer"></div></div></div></div>');
 
     return new Schedule;
   }
@@ -1339,9 +1535,13 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     runEveryMinute(renderScheduleButton);
   }
 
+  var render_award = function (val) {
+    if (CUSTOM.resources.awards.data && CUSTOM.resources.awards.data[val.data("name")]) val.addClass("award_" + CUSTOM.resources.awards.data[$(val).data("name")]);
+  }
+
   var render_awards = function () {
     $(".userlist_item").each(function (key, val) {
-      if (CUSTOM.resources.awards.data && CUSTOM.resources.awards.data[$(val).data("name")]) $(val).addClass("award_" + CUSTOM.resources.awards.data[$(val).data("name")]);
+      render_award($(val));
     });
   }
   CUSTOM.resources.awards.callback.push(render_awards);
@@ -1436,6 +1636,16 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     });
     apply_options();
   }
+  
+  var apply_pmbar_unfocus = function (apply) {
+    $("#chatline").unbind("focusin");
+    $("#chatline").unbind("focusout");
+    
+    if (apply) {
+      $("#chatline").focusin(function () {$("#pmbar").addClass("back");});
+      $("#chatline").focusout(function () {$("#pmbar").removeClass("back");})
+    }
+  }
 
   var apply_options = function () {
     set_body_class("newchat", get_option("newchat"));
@@ -1445,8 +1655,12 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     set_body_class("intro_disable", get_option("intro_disable"));
     set_body_class("hideafkicons", get_option("hideafkicons"));
     set_body_class("large-chat", get_option("large-chat"));
+    set_body_class("nice_navbar", get_option("nice_navbar"));
     display_button("emote-disable", get_option("emote_disable"));
     apply_hidden_video(get_option("hide-video"));
+    userlist_applyProfiles();
+    set_body_class("integrated_profile", get_option("integrated_profile"));
+    apply_pmbar_unfocus(get_option("pmbar_unfocus"));
     handleWindowResize();
     if (typeof (moment) !== "undefined") {
       var lang;
@@ -1471,12 +1685,23 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
   var elem_to_user = function (i, el) {
     var elem = $(el);
+
     return {
-      meta: elem.data("meta"),
-      name: elem.data("name"),
-      profile: elem.data("profile"),
-      rank: elem.data("rank")
+      meta: elem.data("meta") || {},
+      name: elem.data("name") || "",
+      profile: elem.data("profile") || {
+        image: "",
+        text: ""
+      },
+      rank: elem.data("rank"),
+      leader: elem.data("leader") || false,
+      icon: elem.data("icon") || false,
+      afk: elem.data("afk") || false
     }
+  }
+
+  var get_user = function (name) {
+    return elem_to_user(-1, findUserlistItem(name));
   }
 
   var get_users = function () {
@@ -1521,7 +1746,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       original(e);
       if (is_new) addChatMessage(getIntroFromName(e.name, 1));
       colorize_userlist_item(findUserlistItem(e.name))
+      render_awards(findUserlistItem(e.name));
       renderStars();
+      userlist_profile(findUserlistItem(e.name));
     });
 
     registerCallback("userLeave", function (e, original) {
@@ -1583,36 +1810,44 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       return TwitchPlayer.__super__.load.call(this, e)
     }
 
-    if (!CUSTOM.mediaType || CUSTOM.mediaType === "tw") {
+    if (!CUSTOM.media_type || CUSTOM.media_type === "tw") {
       PLAYER.mediaType = "";
       PLAYER.mediaId = "";
       socket.emit("playerReady");
     }
   }
-  
+
   var init_better_scroll = function () {
     var check_scroll = function () {
       var elem = $("#messagebuffer");
       return elem[0].scrollHeight - elem.scrollTop() - elem.outerHeight() - elem.children().last().height() <= 0
     }
-    
+
     $("#messagebuffer").scroll(function () {
-      SCROLLCHAT = SCROLLCHAT && check_scroll();
-    });
-    $('#messagebuffer').unbind("mouseleave");
-    $('#messagebuffer').mouseleave(function () {
       SCROLLCHAT = check_scroll();
     });
+    $('#messagebuffer').unbind("mouseleave");
+    $('#messagebuffer').unbind("mouseenter");
+  }
+
+  var check_nice_navbar = function () {
+    if (window.scrollY === 0) $("nav.navbar").addClass("visible");
+    else $("nav.navbar").removeClass("visible");
+  }
+
+  var init_nice_navbar = function () {
+    $(window).scroll(check_nice_navbar);
+    check_nice_navbar();
   }
 
   var init = function () {
     loadData();
     init_options();
-    init_clock();
-    init_capturelist();
     init_tabcomplete();
     init_controls();
+    init_capturelist();
     init_chatsizer();
+    init_clock();
   }
 
   var init_once = function () {
@@ -1626,6 +1861,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     init_hidePlayer();
     init_better_player();
     init_better_scroll();
+    init_nice_navbar();
 
     CUSTOM.init_done = true;
   }
@@ -1636,5 +1872,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   } else {
     console.info("Already initialized, skipping initializing");
     init();
+  }
+
+  if (CUSTOM.chat_only === true) {
+    chatOnly();
   }
 })();
