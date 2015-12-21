@@ -713,6 +713,11 @@ video.channel-emote {
   animation-play-state: running;
 }
 
+.snow #mainpage {
+  background-image: url("//b.thumbs.redditmedia.com/OdcRQL9gi4eUxyPXqDtDWdRukGj7yxz4UtxLdDZUdZQ.png"), url("//b.thumbs.redditmedia.com/0o8P7ZNL_G87asJqArZneHd_lDOsJfPnKNbOFLUf1ik.png"), url("//b.thumbs.redditmedia.com/qmkwjr9UVRDmV9MBibRDVLWEUVLrFEtTXXuAn3TfJ9Q.png");
+  animation: 20s linear 0s normal none infinite running snow;
+}
+
 /**************** KEYFRAMES ***************/
 
 @keyframes blink_pm {
@@ -1187,6 +1192,15 @@ video.channel-emote {
   98% {
     -webkit-transform: translate(-0.5px, 1.5px) rotate(-0.5deg);
   };
+}
+
+@keyframes snow {
+  0% {
+    background-position: 0px 0px, 0px 0px, 0px 0px;
+  }
+  100% {
+    background-position: 500px 1000px, 400px 400px, 300px 300px;
+  }
 }
 
 @media(max-width: 1366px) {
