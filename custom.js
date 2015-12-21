@@ -103,6 +103,13 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       "values": [false, true],
       "default": false
     },
+    "snow": {
+      "displayanme": "Show Snow",
+      "type": "toggle",
+      "names": ["", ""],
+      "values": [false, true],
+      "default": false
+    },
     "pmbar_unfocus": {
       "displayname": "Hide PM windows without new PMs when typing in chatbar",
       "type": "toggle",
@@ -139,13 +146,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     "hide-video": {
       "displayname": "Hide Video",
       "type": "none",
-      "default": false
-    },
-    "snow": {
-      "displayanme": "Snow",
-      "type": "toggle",
-      "names": ["", ""],
-      "values": [false, true],
       "default": false
     }
   }
