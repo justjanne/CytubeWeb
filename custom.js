@@ -104,7 +104,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       "default": false
     },
     "snow": {
-      "displayanme": "Show Snow",
+      "displayname": "Show Snow",
       "type": "toggle",
       "names": ["", ""],
       "values": [false, true],
