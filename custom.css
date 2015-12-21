@@ -1,3 +1,80 @@
+#colorpopup .colorbtn[data-color=null] {
+  background: repeating-linear-gradient(
+  45deg,
+  #333,
+  #333 10px,
+  #555 10px,
+  #555 20px
+);
+}
+
+#colorpopup .colorbtn {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  margin: 0 2.5px;
+  vertical-align: bottom;
+}
+
+#colorpopup {
+  padding-left: 2.5px;
+  padding-right: 2.5px;
+}
+
+#colorpopup {
+  right: 0px;
+  left: auto;
+}
+
+.wolfram-table {
+  display: table;
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #444;
+}
+
+.wolfram-row {
+  display: table-row;
+}
+
+.wolfram-data, .wolfram-header {
+  display: table-cell;
+  padding: .4rem;
+  border: 1px solid #444;
+}
+
+.wolfram-header {
+  text-transform: capitalize;
+}
+
+.wolfram-footer {
+  margin-top: .4rem;
+  margin-bottom: -.4rem;
+}
+
+.wolfram-table ~ .wolfram-footer{
+  font-size: 12px !important;
+  color: #888;
+  font-style: italic;
+}
+
+.wolfram {
+  padding-bottom: .8rem;
+}
+
+.wolfram-row-continued * {
+  border-bottom: none;
+}
+
+.wolfram-row-continuation * {
+  border-top: none;
+  border-bottom: none;
+}
+
+.wolfram-row-continuation:first-child .wolfram-header {
+  display: none;
+}
+
 body.nice_navbar nav.navbar {
   transition: border-width 500ms, background 500ms;
   border-bottom-width: 0;
@@ -123,78 +200,6 @@ body.hideafkicons .userlist_afk .glyphicon-time:before {
   display: none;
 }
 
-.award_ring_djupzseven > span:first-child:before {
-    content: url('http://i.imgur.com/j0q0XqB.png');
-}
-
-.award_ring_green > span:first-child:before {
-    content: url('http://i.imgur.com/6zgXSM8.png');
-}
-
-.award_ring_blue > span:first-child:before {
-    content: url('http://i.imgur.com/ZkV0Sc9.png');
-}
-
-.award_ring_gold > span:first-child:before {
-    content: url('http://i.imgur.com/b3jf7N3.png');
-}
-
-.award_ring_purple > span:first-child:before {
-    content: url('http://i.imgur.com/ns4LwGT.png');
-}
-
-.award_hotk > span:first-child:before {
-    content: url('http://i.imgur.com/GrfoRIj.png');
-}
-
-.award_king > span:first-child:before {
-    content: url('http://i.imgur.com/WngdT08.png');
-}
-
-.award_queen > span:first-child:before {
-    content: url('http://i.imgur.com/YKB72bD.png');
-}
-
-.award_ring_white > span:first-child:before {
-    content: url('http://i.imgur.com/scPiHPq.png');
-}
-
-.award_ring_navy > span:first-child:before {
-    content: url('http://i.imgur.com/PtOuzMj.png');
-}
-
-.award_ring_awesome > span:first-child:before {
-    content: url('http://i.imgur.com/MwhnvOb.png');
-}
-
-.award_ring_amantagram > span:first-child:before {
-    content: url('http://i.imgur.com/qLoQTES.png');
-}
-
-.award_ring_rainbow > span:first-child:before {
-    content: url('http://i.imgur.com/T4R53em.png');
-}
-
-.award_ring_red > span:first-child:before {
-    content: url('http://i.imgur.com/HdD8eal.png');
-}
-
-.award_ring_blaazellie > span:first-child:before {
-    content: url('http://i.imgur.com/NlyoW8u.png');
-}
-
-.award_ring_pink > span:first-child:before {
-    content: url('http://i.imgur.com/7mlTai3.png');
-}
-
-.award_ring_kamikazepolerson > span:first-child:before {
-    content: url('http://i.imgur.com/z6hORhS.png');
-}
-
-.award_ring_nonexistenttars > span:first-child:before {
-    content: url('http://i.imgur.com/gtKjGmB.png');
-}
-
 .userlist_op,.userlist_owner {
     font-weight: bold!important;
 }
@@ -211,8 +216,12 @@ body:not(.chatcolors) .username {
   color: inherit !important;
 }
 
-body:not(.chatcolors) .userlist_item span:nth-child(2):not(.userlist_owner):not(.userlist_op):not(.userlist_siteadmin) {
+body:not(.chatcolors) .userlist_item > span:nth-child(2):not(.userlist_owner):not(.userlist_op):not(.userlist_siteadmin) {
   color: inherit !important;
+}
+
+#messagebuffer > div {
+  overflow-y: hidden
 }
 
 body.newchat #messagebuffer>div>span:nth-child(2) {
@@ -248,7 +257,6 @@ body.newchat #messagebuffer>div>:last-child {
 
 body.newchat #messagebuffer>div {
   display: block;
-  overflow-x: auto;
 }
 
 body.newchat #messagebuffer>div>span {
@@ -295,13 +303,13 @@ body.intro_disable [data-type="intro"] {
 
 .pm-buffer .channel-emote,
 .pm-buffer .channel-user-emote {
-  height: 50px;
+  max-height: 50px;
   width: auto;
 }
 
 .pm-buffer .anttext .channel-emote,
 .pm-buffer .anttext .channel-user-emote {
-  height: 25px;
+  max-height: 25px;
   width: auto;
 }
 
@@ -318,7 +326,6 @@ body.intro_disable [data-type="intro"] {
   border: none !important;
   margin-top: 1px !important;
   border-radius: 1px !important;
-  background: rgba(20,20,20,0.95) !important;
 }
 
 .user-dropdown {
@@ -366,7 +373,7 @@ body.intro_disable [data-type="intro"] {
   text-align: center;
 }
 
-.userlist_item span:nth-child(2) {
+.userlist_item > span:nth-child(2) {
   border-left: 2px solid;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -480,6 +487,7 @@ body.intro_disable [data-type="intro"] {
 }
 
 .spoilerfix {
+  display: inline-block;
   color: #000000;
   background-color: #000000;
 }
@@ -488,12 +496,20 @@ body.intro_disable [data-type="intro"] {
   color: #ffffff;
 }
 
+.spoilerfix img {
+  opacity: 0;
+}
+
+.spoilerfix:hover img {
+  opacity: 1;
+}
+
 .gentletext .channel-emote {
   opacity: 0.2;
 }
 
 .anttext .channel-emote {
-  height: 50px;
+  max-height: 50px;
   width: auto;
 }
 
@@ -1317,8 +1333,42 @@ body.integrated_profile #userlist .profile-box {
   position: relative;
   left: 0!important;
   top: 0!important;
+  border: none !important;
 }
 
 #pmbar.back .panel.panel-default {
   display: none;
+}
+
+#newmessages-indicator-bghack {
+  position: absolute;
+  margin-left: -165px;
+  top: -34px;
+  padding: 0 4px;
+  border-radius: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+#newmessages-indicator .glyphicon {
+  margin: 0 4px;
+}
+
+#newmessages-indicator {
+  cursor: initial !important;
+}
+
+#newmessages-indicator-bghack * {
+  vertical-align: middle;
+}
+
+#newmessages-indicator-bghack:hover {
+  background: #357;
+}
+
+#usercount {
+max-width: 2rem !important;
+display: inline-block;
+overflow: hidden;
+max-height: 28px;
 }

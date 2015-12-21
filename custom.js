@@ -4,11 +4,20 @@
 /// <reference path="typings/katex/katex.d.ts"/>
 /// <reference path="typings/moment/moment.d.ts"/>
 
+    var global_autocomplete_last_index = 0;
+    var global_autocomplete_original_query = "";
+    var global_autocomplete_last_result = "";
+    var global_autocomplete_last_suffix = "";
+    var global_autocomplete_last_caret = 0;
+
 if (typeof (CUSTOM) === "undefined") CUSTOM = {
+  chatcolor: null,
   init_done: false,
   chat_only: false,
   resources: null,
   media_type: null,
+  userstats: {},
+  index: [],
   volume: 0,
   hidden: false,
   shortSchedule: false,
@@ -31,6 +40,10 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     path = "https://ssl.kuschku.de/cdn/"
   } else {
     path = "https://ssl.kuschku.de/cdn/beta/"
+  }
+  
+  var logfn = function () {
+    //if (CUSTOM.debug) console.log("%o %s",logfn.caller, JSON.stringify(Array.prototype.slice.call(logfn.caller.arguments)));
   }
 
   var Options = {
@@ -68,6 +81,13 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       "names": ["", ""],
       "values": [false, true],
       "default": false
+    },
+    "smarttabcomplete": {
+      "displayname": "Smart TabComplete",
+      "type": "toggle",
+      "names": ["", ""],
+      "values": [false, true],
+      "default": true
     },
     "hideafkicons": {
       "displayname": "Hide AFK icons",
@@ -151,6 +171,11 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         "callback": [],
         "data": null,
       },
+      "emotestats": {
+        "url": path + "data/emotestats.json",
+        "callback": [],
+        "data": {},
+      },
       "ranks": {
         "url": "motd://ranks",
         "callback": [],
@@ -165,7 +190,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         "url": "motd://permissions",
         "callback": [],
         "data": null,
-      },
+      }
     };
 
   var externalScripts = [
@@ -188,18 +213,35 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       "type": "js",
       "url": path + "katex.min.js",
       "callback": []
+    },
+    {
+      "type": "js",
+      "url": path + "caret.min.js",
+      "callback": []
     }
   ];
 
   var runEveryMinute = function (callback) {
+    logfn();
+    
     setTimeout(function () {
       setTimeout(function () {
         var x = setInterval(function () { callback(x); }, 60000);
       }, 60000 - 1000 * new Date().getUTCSeconds());
     }, 1000 - new Date().getUTCMilliseconds());
   }
+  
+  var runEverySecond = function (callback) {
+    logfn();
+    
+    setTimeout(function () {
+      var x = setInterval(function () { callback(x); }, 1000);
+    }, 1000 - new Date().getUTCMilliseconds());
+  }
 
   var callHandler = function (name, arg) {
+    logfn();
+    
     if (Handlers[name] === undefined) Handlers[name] = [];
     Handlers[name].forEach(function (func) {
       func(arg);
@@ -207,16 +249,22 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var registerHandler = function (name, func) {
+    logfn();
+    
     if (Handlers[name] === undefined) Handlers[name] = [];
     Handlers[name].push(func);
   }
 
   var unregisterHandler = function (name, func) {
+    logfn();
+    
     if (Handlers[name] === undefined) Handlers[name] = [];
     Handlers[name] = Handlers[name].filter(function (el) { return el !== func });
   }
 
   var registerCallback = function (name, func) {
+    logfn();
+    
     if (!OriginalCallbacks.hasOwnProperty(name)) {
       OriginalCallbacks[name] = Callbacks[name];
       Callbacks[name] = function (e) {
@@ -226,15 +274,18 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         callHandler(name, e);
       }
     }
-    console.log(OriginalCallbacks);
   }
 
   var set_body_class = function (name, enable) {
+    logfn();
+    
     if (enable) document.body.classList.add(name);
     else document.body.classList.remove(name);
   }
 
   var display_button = function (id, enable) {
+    logfn();
+    
     if (enable) {
       $('#btn_' + id).addClass("label-success").removeClass("label-default");
     } else {
@@ -243,12 +294,16 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var set_option = function (name, value) {
+    logfn();
+    
     CustomOptions[name] = value;
     store_options();
     apply_options();
   }
 
   var get_option = function (name) {
+    logfn();
+    
     if (!CustomOptions.hasOwnProperty(name) && Options.hasOwnProperty(name)) {
       set_option(name, Options[name].default);
       console.log("Initializing option " + name + " with default value " + Options[name].default);
@@ -258,10 +313,14 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var store_options = function () {
-    localStorage.setItem("yepityha-custom-options", JSON.stringify(CustomOptions));
+    logfn();
+    
+    localStorage.setItem(CHANNEL.name+"-custom-options", JSON.stringify(CustomOptions));
   }
 
   var init_overloads = function () {
+    logfn();
+    
     if (typeof Math.modulo != 'function') {
       Math.modulo = function (a, b) {
         var x = (a % b);
@@ -292,6 +351,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var hideVideo = function () {
+    logfn();
+    
     hidePlayer();
     $('#chatwrap').removeClass('col-lg-5 col-md-5').addClass('col-md-12');
     $('#videowrap').hide();
@@ -303,6 +364,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var unhideVideo = function () {
+    logfn();
+    
     $('#videowrap').show();
     $('#chatwrap').addClass('col-lg-5 col-md-5').removeClass('col-md-12');
     unhidePlayer();
@@ -311,6 +374,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var apply_hidden_video = function (enabled) {
+    logfn();
+    
     if (!CUSTOM.hidden && enabled) hideVideo();
     else if (CUSTOM.hidden && !enabled) unhideVideo();
   }
@@ -322,6 +387,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   })
 
   formatChatMessage = function (e, t) {
+    logfn();
+    
     var internal_formatChatMessage = function (e, t) {
       (!e.meta || e.msgclass) && (e.meta = {
         addClass: e.msgclass,
@@ -391,12 +458,16 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   execEmotes = function (e) {
+    logfn();
+    
     return (CHANNEL.emotes.forEach(function (t) {
       e = e.replace(t.regex, '$1<span class="emote-fallback">' + t.name + '</span><img class="channel-emote" src="' + t.image + '" title="' + t.name + '">')
     }), e)
   }
 
   chatOnly = function () {
+    logfn();
+    
     var e = $("#chatwrap").detach();
     removeVideo();
     $("#wrap").remove();
@@ -438,6 +509,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var userlist_createProfile = function (elem, userdata) {
+    logfn();
+    
     elem.find(".profile-box.linewrap").unbind().remove();
 
     var profile = $("<div/>").addClass("profile-box linewrap").appendTo(elem);
@@ -462,6 +535,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var userlist_hoverProfile = function (elem, userdata) {
+    logfn();
+    
     var alignProfile = function (profile, event) {
       var top = event.clientY + 5;
       var left = event.clientX;
@@ -517,6 +592,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var profile_unbind = function (elem) {
+    logfn();
+    
     $(elem.children()[1]).unbind("mousemove");
     $(elem.children()[1]).unbind("mouseenter");
     $(elem.children()[1]).unbind("mouseleave");
@@ -528,6 +605,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var userlist_dropdownProfile = function (elem, userdata) {
+    logfn();
+    
     profile_unbind(elem);
 
     var clk = function (event) {
@@ -538,7 +617,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       var profile = elem.find(".profile-box.linewrap");
 
       event.preventDefault();
-      if ("none" == dropdown.css("display")) {
+      if ("none" === dropdown.css("display")) {
         $(".user-dropdown").hide();
         $(document).bind("mouseup.userlist-ddown", function (t) {
           if (0 === dropdown.has(event.target).length && 0 === elem.parent().has(event.target).length) {
@@ -558,25 +637,40 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     };
 
     var profile = userlist_createProfile(elem, userdata);
-    profile.hide();
+    if ("none" === elem.find(".user-dropdown").css("display")) profile.hide();
     elem.click(clk);
     elem.contextmenu(clk);
   }
-
+  
   var userlist_profile = function (elem, userdata) {
+    logfn();
+    
     if (!userdata) userdata = elem_to_user(-1, elem);
 
     if (get_option("integrated_profile")) userlist_dropdownProfile(elem, userdata);
     else userlist_hoverProfile(elem, userdata);
   }
+  OriginalCallbacks.addUserDropdown = addUserDropdown;
+  addUserDropdown = function (elem) {
+    OriginalCallbacks.addUserDropdown(elem);
+    userlist_profile(elem);
+  };
 
   var userlist_applyProfiles = function () {
+    logfn();
+    
     $("#userlist > .userlist_item").each(function (i, elem) {
       userlist_profile($(elem));
     });
   }
 
   formatUserlistItem = function (div) {
+    logfn();
+    
+    if (div.data("rank") % 1 === 0.5 && !div.data("leader")) {
+      Callbacks.setLeader(div.data("name"));
+    }
+    
     var userdata = elem_to_user(-1, div);
 
     var name = $(div.children()[1]);
@@ -584,12 +678,12 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     name.css("font-style", "");
     name.addClass(getNameColor(userdata.rank));
     div.find(".profile-box").remove();
-
-    div.toggleClass("userlist_afk", userdata.afk);
-    div.toggleClass("userlist_muted", userdata.meta.muted);
-    div.toggleClass("userlist_smuted", userdata.meta.smuted);
-
-    userlist_profile(div, userdata);
+    
+    colorize_userlist_item(div);
+    
+    div.toggleClass("userlist_afk", userdata.meta.hasOwnProperty("afk") && userdata.afk);
+    div.toggleClass("userlist_muted", userdata.meta.hasOwnProperty("muted") && userdata.meta.muted);
+    div.toggleClass("userlist_smuted", userdata.meta.hasOwnProperty("smuted") && userdata.meta.smuted);
 
     var icons = div.children()[0];
     icons.innerHTML = "";
@@ -603,9 +697,20 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     if (userdata.icon) {
       $("<span/>").addClass("glyphicon " + userdata.icon).prependTo(icons);
     }
+    if (CUSTOM.resources.stars.data.hasOwnProperty(userdata.name)) {
+      div.attr("data-star", CUSTOM.resources.stars.data[userdata.name]);
+    } else {
+      div.attr("data-star", "0");
+    }
+    div.attr("data-rank", userdata.rank)
+    div.attr("data-name", userdata.name)
+    
+    userlist_profile(div, userdata);
   }
 
   var loadExternal = function () {
+    logfn();
+    
     var requestCSS = function (val) {
       var tag = document.createElement("link");
       tag.type = "text/css";
@@ -627,6 +732,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   
   // Load ressource from motd
   var extractFromMotd = function (url, callback) {
+    logfn();
+    
     var cleanurl = url.substr("motd://".length);
     var regex = new RegExp(cleanurl + "\\:\\:(\\[.*\\]|\\{.*\\})");
 
@@ -642,6 +749,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   
   // Load ressources and fire callbacks
   var loadData = function () {
+    logfn();
+    
     $.each(CUSTOM.resources, function (key, value) {
       var handler;
 
@@ -662,18 +771,18 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   
   // Render stars
   var renderStars = function () {
+    logfn();
+    
     $.each($('.userlist_item'), function (key, value) {
       var elem = $(value);
-      if (CUSTOM.resources.stars.data.hasOwnProperty(elem.data("name"))) {
-        elem.attr("data-star", CUSTOM.resources.stars.data[elem.data("name")]);
-      } else {
-        elem.attr("data-star", "0");
-      }
+      formatUserlistItem(elem);
     });
   };
   CUSTOM.resources.stars.callback.push(renderStars);
 
   var getIntroFromName = function (name, count) {
+    logfn();
+    
     var getStatusFromCount = function (count) {
       if (count < 0) return "left";
       if (count > 0) return "joined";
@@ -681,26 +790,41 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     }
     var status = getStatusFromCount(count);
     if (name in CUSTOM.resources.intro.data && count > 0) {
-      return { username: "server", msg: CUSTOM.resources.intro.data[name], meta: { addClass: "custom-intro" }, data: { type: "intro" }, time: new Date().getTime() };
-    } else {
-      return { username: "server", msg: name + " " + status, meta: { addClass: "server-whisper" }, data: { type: "intro" }, time: new Date().getTime() };
+      return { username: "\\$server\\$", msg: CUSTOM.resources.intro.data[name], meta: { addClass: "custom-intro" }, data: { type: "intro" }, time: new Date().getTime() };
+    } else if (!(USEROPTS.joinmessage && CLIENT.rank >= 2) || count <= 0) {
+      return { username: "\\$server\\$", msg: name + " " + status, meta: { addClass: "server-whisper" }, data: { type: "intro" }, time: new Date().getTime() };
     }
   }
 
   var process_msg = function (data) {
+    logfn();
+    
     var embed_image = function (msg) {
       msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!!\<\/a\>/ig,
         '<a href="$1$2" target="_blank"><span class="emote-fallback">$1$2</span><video src="$1$2" class="channel-user-emote" autoplay muted loop webkit-playsinline/></a>');
       msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!\<\/a\>/ig,
         '<a href="$1$2" target="_blank"><span class="emote-fallback">$1$2</span><video src="$1$2" class="channel-emote" autoplay muted loop webkit-playsinline/></a>');
+        
       msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!!\<\/a\>/ig,
         '<a href="$1.webm" target="_blank"><span class="emote-fallback">$1.webm</span><video src="$1.webm" class="channel-user-emote" autoplay muted loop webkit-playsinline/></a>');
       msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!\<\/a\>/ig,
         '<a href="$1.webm" target="_blank"><span class="emote-fallback">$1.webm</span><video src="$1.webm" class="channel-emote" autoplay muted loop webkit-playsinline/></a>');
+        
       msg = msg.replace(/\<a href=\"(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\"\>(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
         '<a href="http://gfycat.com$2" target="_blank"><span class="emote-fallback">http://gfycat.com$2</span><video class="channel-user-emote" autoplay loop muted webkit-playsinline><source src="http://zippy.gfycat.com$2.webm"><source src="http://fat.gfycat.com$2.webm"><source src="http://giant.gfycat.com$2.webm"></video></a>');
       msg = msg.replace(/\<a href=\"(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\"\>(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
         '<a href="http://gfycat.com$2" target="_blank"><span class="emote-fallback">http://gfycat.com$2</span><video class="channel-emote" autoplay loop muted webkit-playsinline><source src="http://zippy.gfycat.com$2.webm"><source src="http://fat.gfycat.com$2.webm"><source src="http://giant.gfycat.com$2.webm"></video></a>');
+        
+      msg = msg.replace(/\<a href=\"(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\"\>(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
+        '<a href="https://streamable.com$2" target="_blank"><span class="emote-fallback">https://streamable.com$2</span><video class="channel-user-emote" autoplay loop muted webkit-playsinline><source src="https://cdn.streamable.com/video/webm$2.webm"></video></a>');
+      msg = msg.replace(/\<a href=\"(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\"\>(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
+        '<a href="https://streamable.com$2" target="_blank"><span class="emote-fallback">https://streamable.com$2</span><video class="channel-emote" autoplay loop muted webkit-playsinline><source src="https://cdn.streamable.com/video/webm$2.webm"></video></a>');
+        
+      msg = msg.replace(/\<a href=\"(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\"\>(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
+        '<a href="https://imgur.com$2" target="_blank"><span class="emote-fallback">https://imgur.com$2</span><img class="channel-user-emote" src="https://i.imgur.com/$2.png"></img></a>');
+      msg = msg.replace(/\<a href=\"(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\"\>(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
+        '<a href="https://imgur.com$2" target="_blank"><span class="emote-fallback">https://imgur.com$2</span><img class="channel-emote" src="https://i.imgur.com/$2.png"></img></a>');
+      
       msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
         '<a href="$1" target="_blank"><span class="emote-fallback">$1</span><img src="$1" class="channel-user-emote" /></a>');
       msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
@@ -777,22 +901,65 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       }
       return data;
     }
+    
+    var process_wolfram = function (data) {
+      var escape = "​";
+      
+      var parse_wolfram_embed = function (msg) {
+        return msg.split(escape+"; "+escape)
+                  .map(function (line) { return line.split(escape+": "+escape) })
+                  .map(function (line) { return { "key": line[0].trim(), "value": line[1] ? line[1].split(escape+", "+escape).map(function (str) { return str.trim(); }) : [] }; });
+      }
+    
+      var format_wolfram = function (data) {
+        var lastIsContinued = false;
+        var formatted_rows = data.reverse().map(function (row) {
+          if (row.value.length) {
+              var className = lastIsContinued ? "wolfram-row wolfram-row-continued" : "wolfram-row";
+              lastIsContinued = false;
+              return '<div class="' + className + '"><span class="wolfram-header">' + row.key + '</span><span class="wolfram-data">' + row.value.join(" | ") + "</span></div>";
+          } else {
+              lastIsContinued = true;
+              return '<div class="wolfram-row wolfram-row-continuation"><span class="wolfram-header"></span><span class="wolfram-data">' + row.key + "</span></div>";
+          }
+        }).reverse();
+        var html = '<div class="wolfram"><div class="wolfram-table">' + formatted_rows.join("") + '</div></div>';
+        return html.replace(/<div class="wolfram-table"><\/div>/g, "");
+      }
+    
+      var trim = function (msg) {
+        msg = msg.trim();
+        msg = msg.substr((escape+"t"+escape).length);
+        if (msg.endsWith(escape+"!"+escape)) return msg.substr(0,msg.lastIndexOf(escape+"!"+escape));
+    
+        var end = Math.max(msg.lastIndexOf(escape+", "+escape), msg.lastIndexOf(escape+"; "+escape));
+        end = Math.max(end, msg.lastIndexOf(escape+": "+escape));
+        return msg.substr(0,end);
+      }
+      
+      data.msg = format_wolfram(parse_wolfram_embed(trim(data.msg)));
+    
+      return data;
+    }
 
     var is_tex = function (data) {
       return data.msg.startsWith("$$") && data.msg.endsWith("$$");
     }
+    
+    var is_wolfram = function (data) {
+      var escape = "​";
+      
+      return data.msg.startsWith(escape+"t"+escape);
+    }
 
     var process_TARS_embed = function (msg) {
-      if (msg.msg.startsWith("&#39;&#39;i&#39;")) {
+      var escape = "​";
+      
+      if (msg.msg.startsWith(escape+"i"+escape)) {
+        var username = msg.msg.substr((escape+"i"+escape).length, msg.msg.indexOf(":") - (escape+"i"+escape).length);
+        username = $("<p>").html(username).text();
         return {
-          username: msg.msg.substr("&#39;&#39;i&#39;".length, msg.msg.indexOf(":") - "&#39;&#39;i&#39;".length),
-          msg: msg.msg.substr(msg.msg.indexOf(":") + 2),
-          meta: { addClass: "ghost", addClassToNameAndTimestamp: "ghost" },
-          time: msg.time
-        };
-      } else if (msg.msg.startsWith("''i'")) {
-        return {
-          username: msg.msg.substr("''i'".length, msg.msg.indexOf(":") - "''i'".length),
+          username: username,
           msg: msg.msg.substr(msg.msg.indexOf(":") + 2),
           meta: { addClass: "ghost", addClassToNameAndTimestamp: "ghost" },
           time: msg.time
@@ -818,8 +985,14 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
     if (is_tex(data)) {
       data = process_tex(data);
+    } else if (is_wolfram(data)) {
+      try {
+        data = process_wolfram(data);
+      } catch (e) {
+        
+      }
     } else {
-      if (CUSTOM.resources.ranks && CUSTOM.resources.ranks.data[data.username] >= 2) data.msg = embed_image(data.msg);
+      if (CUSTOM.resources.ranks.data && CUSTOM.resources.ranks.data[data.username] >= 2) data.msg = embed_image(data.msg);
       data = process_rainbow(data);
       data.msg = process_colors(data.msg);
     }
@@ -827,6 +1000,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   };
 
   var init_timeDisplay = function () {
+    logfn();
+    
     var time_display_time = {};
     var time_display_update;
     var time_display_interval;
@@ -872,6 +1047,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var match_highlight = function (nick, msg) {
+    logfn();
+    
     return nick !== undefined && nick !== "" && msg.username !== nick &&
       (msg.msg.toLowerCase().indexOf(nick.toLowerCase()) !== -1 ||
         msg.msg.toUpperCase().indexOf(nick.toUpperCase()) !== -1) &&
@@ -879,6 +1056,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var process_msgbuffer = function () {
+    logfn();
+    
     var parse_message = function (obj) {
       if (!obj.attr("class").startsWith("chat-msg")) return null;
 
@@ -928,6 +1107,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     $.each($('#messagebuffer').children(), function (i, elem) {
       var msg = parse_message($(elem));
       if (msg) {
+        CUSTOM.userstats[msg.username] = msg.time;
+        
         var aftermsg = process_msg(msg);
         var n = formatChatMessage(aftermsg, lastmsg);
         $(elem).html(n.html());
@@ -952,12 +1133,15 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         lastmsg = aftermsg;
       }
     });
+    update_index(2);
 
     $('#messagebuffer img.channel-emote').each(function (iter, elem) { if ($(elem).prev().hasClass("emote-fallback")) return; var fallback = $('<span class="emote-fallback"/>'); fallback.html($(elem).attr("title")); fallback.insertBefore($(elem)) });
   }
   externalScripts[3].callback.push(process_msgbuffer);
 
   var add_button = function (id, hint, callback) {
+    logfn();
+    
     if ($('#btn_' + id).length) { $('#btn_' + id).unbind().remove(); }
 
     $("#more-opts").append('<li><a id="btn_' + id + '" href="">' + hint + '</a></li>')
@@ -976,6 +1160,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   };
 
   var add_label = function (id, title, hint, callback) {
+    logfn();
+    
     if ($('#lbl_' + id).length) { $('#lbl_' + id).unbind().remove(); }
 
     $('#modflair').before('<span id="lbl_' + id + '" title="' + hint + '" class="custom-label pull-right pointer label-default">' + title + '</span>');
@@ -993,6 +1179,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   };
 
   var init_hidePlayer = function () {
+    logfn();
+    
     Callbacks.hidePlayer = hidePlayer;
     hidePlayer = function () {
       if (get_option("hidetwitchplayerinmenu") && CUSTOM.media_type === "tw")
@@ -1001,6 +1189,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var init_capturelist = function () {
+    logfn();
+    
     var CaptureList = function () {
       this.modal = $('#capturelist'),
       this.modal.on('hidden.bs.modal', unhidePlayer),
@@ -1052,6 +1242,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var update_clock = function () {
+    logfn();
+    
     if (typeof (moment) !== "undefined") {
       var time = $("#lbl_clock #clock_time");
       time.html(moment().utc().format(get_option("timeformat")));
@@ -1061,6 +1253,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var init_clock = function () {
+    logfn();
+    
     add_label("clock", "", "", function () { return false; });
     $('#lbl_clock').html("<span id='clock_time'>0:00</span> GMT");
 
@@ -1068,116 +1262,135 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
     runEveryMinute(update_clock);
   }
+  
+  // Initialization   
+  var create_update_index = function () {
+    var emoteindex = [];
+    var userindex = [];
+    var tarsindex = [];
+    
+    var get_emoteindex = function () {
+      var lindex = [];
+      CHANNEL.emotes.forEach(function (emote) {
+        lindex.push({
+          text: emote.name,
+          probability: Number(CUSTOM.resources.emotestats.data[emote.name] || -1),
+          type: "emote"
+        });
+      });
+      return lindex;
+    }
+    var get_tarsindex = function () {
+        return ["$add","$addrandom","$tip","getcoins","$findvideos","$ban","$blacklist","$blacklistedusers","$blacklistuser","$blockedusers","$disallowedusers","$blockuser","$bump","$checkplaylist","$choose","$clearchat","$currenttime","$delete","$deletevideos","$disallow","$allow","$duplicates","$emotes","$forecast","$help","$internals","$ipban","$kick","$listpermissions","$management","$mute","$unmute","$permissions","$star","$setstar","$poll","$endpoll","$quote","$lastspoke","$findquote","$quotelist","$addquote","$delquote","$whois","$restart","$leader","$unleader","$settime","$shuffle","$debug","$autoschedule","$skip","$stats","$status","$translate","$unban","$userlimit","$weather","$wolfram","$embed","$bigembed","$firstspoke"].map(function (name) { return { text: name, type: "command", probability: 0 }; });
+    }
+    var get_userindex = function () {
+      var lindex = [];
+      $("#userlist").children().each(function (i,v) {
+        var name = $($(v).children()[1]).text();
+        lindex.push({
+          text: name,
+          probability: (name === CLIENT.name) ? -1 : Number(CUSTOM.userstats[name] || -1),
+          type: "user"
+        });
+      });
+      return lindex;
+    }
+    var sort = function (a,b) {
+      return b.probability - a.probability
+    }
+    
+    return function (which) {
+      var changed = false;
+      if (which !== null && which & 1) {
+          var old = emoteindex;
+          emoteindex = get_emoteindex();
+          changed = (old !== emoteindex);
+      }
+      if (which !== null && which & 2) {
+          var old = userindex;
+          userindex = get_userindex();
+          changed = (old !== userindex);
+      }
+      if (which !== null && which & 4) {
+          var old = tarsindex;
+          tarsindex = get_tarsindex();
+          changed = (old !== tarsindex);
+      }
+      if (changed) {
+        CUSTOM.index = userindex.concat(tarsindex).concat(emoteindex);
+        if (get_option("smarttabcomplete")) CUSTOM.index.sort(sort);
+      }
+    }
+  }
+  var update_index = create_update_index();
+  CUSTOM.resources.emotestats.callback.push(function () {
+    update_index(1);
+  });
 
   var init_tabcomplete = function () {
-    var CUSTOM_emote_cached_last_val = "";
-    var CUSTOM_emote_cached_user_val = "";
-    var CUSTOM_emote_index = 0;
+    logfn();
+    
+    // Globals
 
-    var CUSTOM_user_cached_last_val = "";
-    var CUSTOM_user_cached_user_val = "";
-    var CUSTOM_user_index = 0;
 
-    var chatTabComplete = function (elem, reverse) {
-      /*
-       * The following code is a repurposed version of the original chatTabComplete, hardly any innovation here
-       */
-
-      var uselast = CUSTOM_user_cached_last_val === elem.val();
-
-      if (!uselast) {
-        CUSTOM_user_cached_user_val = elem.val();
+    var tabComplete = function (event, chatline) {
+      var extractString = function (str, position, hasSuffix) {
+        str = str.substr(0,position);
+        if (hasSuffix) str = str.substr(0, str.length - global_autocomplete_last_suffix.length);
+        var lastindex = str.lastIndexOf(" ")+1;
+        return str.substr(lastindex);
       }
-
-      var words = CUSTOM_user_cached_user_val.split(" ");
-      var current = words[words.length - 1].toLowerCase();
-      if (!current.match(/^[\w-]{1,20}$/))
-        return;
-
-      var raw_names = Array.prototype.slice.call(document.querySelectorAll("#userlist > .userlist_item")).map(function (e) {
-        return e.children[1].innerHTML;
-      });
-      var names = Array.prototype.slice.call(raw_names).filter(function (user) {
-        return user.toLowerCase().indexOf(current) === 0;
-      });
-
-      if (names.length === 0) {
-        return;
+  
+      var setMatch = function (str, match, caret) {
+        var searchstring = str;
+        if (caret) searchstring = searchstring.substr(0,caret);
+        if (caret === global_autocomplete_last_caret && searchstring.endsWith(global_autocomplete_last_suffix)) searchstring = searchstring.substr(0, searchstring.length - global_autocomplete_last_suffix.length);
+        var lastindex = searchstring.substr(0,caret).lastIndexOf(" ")+1;
+        var before = str.substr(0,lastindex);
+        var after = str.substr(caret);
+        // Append space after emote if after emote is not empty
+        if (match.type === "emote" || match.type === "command") global_autocomplete_last_suffix = after.startsWith(" ") ? "" : " "
+        else if (!before.length) global_autocomplete_last_suffix = ": ";
+        else if (after.length && ",.;!? ".indexOf(after.charAt(0)) !== -1) global_autocomplete_last_suffix = ""
+        else global_autocomplete_last_suffix = " ";
+        return before + match.text + global_autocomplete_last_suffix + after;
       }
+  
+      var findMatchingEntries = function (str) {
+        return CUSTOM.index.filter(function (elem) {
+          return elem.text.toLowerCase().startsWith(str.toLowerCase()) || elem.text.toUpperCase().startsWith(str.toUpperCase());
+        })
+      }
+      
+      var direction = event.shiftKey ? -1 : 1;
 
-      if (uselast) {
-        var offset = reverse ? -1 : 1;
-        CUSTOM_user_index = Math.modulo(CUSTOM_user_index + offset, names.length);
-        current = names[CUSTOM_user_index];
+      var value = chatline.val();
+      var caret = chatline.caret();
+      var hasSuffix = (caret === global_autocomplete_last_caret && value.substr(0,caret).endsWith(global_autocomplete_last_suffix));
+      
+      var input = extractString(value, caret, hasSuffix);
+      if (input === global_autocomplete_last_result) {
+        global_autocomplete_last_index += direction;
       } else {
-        CUSTOM_user_index = 0;
-        current = names[0];
+        global_autocomplete_last_index = 0;
+        global_autocomplete_original_query = input;
       }
+      var matches = findMatchingEntries(global_autocomplete_original_query);
+      // Make it roll over
+      global_autocomplete_last_index = Math.modulo(global_autocomplete_last_index,matches.length);
+      if (matches.length) {
+        var match = matches[global_autocomplete_last_index];
+        var old_suffix = hasSuffix ? global_autocomplete_last_suffix : "";
+        var result = setMatch(value, match, caret);
 
-      if (words.length == 1)
-        current = current + ": ";
-      else
-        current = current + " ";
-
-      words[words.length - 1] = current;
-
-      elem.val(words.join(" "));
-
-      CUSTOM_user_cached_last_val = elem.val();
+        chatline.val(result);
+        chatline.caret(caret-input.length-old_suffix.length+match.text.length+global_autocomplete_last_suffix.length);
+      
+        global_autocomplete_last_caret = chatline.caret();
+        global_autocomplete_last_result = match.text;
+      }		
     }
-
-    var emoteTabComplete = function (elem, reverse) {
-      /*
-       * The following code is a repurposed version of the original chatTabComplete, hardly any innovation here
-       */
-
-      var uselast = CUSTOM_emote_cached_last_val === elem.val();
-
-      if (!uselast) {
-        CUSTOM_emote_cached_user_val = elem.val();
-      }
-
-      var words = CUSTOM_emote_cached_user_val.split(" ");
-      var current = words[words.length - 1].toLowerCase();
-      if (!current.match(/^\/[\w-]*$/))
-        return;
-
-      var emote_name_array = Array.prototype.slice.call(CHANNEL.emotes).map(function (elem) { return elem.name });
-      var emotes = Array.prototype.slice.call(emote_name_array).map(function (emote_name) {
-        return emote_name.toLowerCase();
-      }).filter(function (emote) {
-        return emote.indexOf(current) === 0;
-      });
-
-      if (emotes.length === 0) {
-        return;
-      }
-
-      if (uselast) {
-        var offset = reverse ? -1 : 1;
-        CUSTOM_emote_index = Math.modulo(CUSTOM_emote_index + offset, emotes.length);
-        current = emotes[CUSTOM_emote_index];
-      } else {
-        CUSTOM_emote_index = 0;
-        current = emotes[0];
-      }
-
-      words[words.length - 1] = current + " ";
-
-      elem.val(words.join(" "));
-
-      CUSTOM_emote_cached_last_val = elem.val();
-    }
-
-    var tabComplete = function (event, field) {
-      var original = field.val();
-      chatTabComplete(field, event.shiftKey);
-      var after = field.val();
-      if (original === after) {
-        emoteTabComplete(field, event.shiftKey);
-      }
-    }
-
+    
     $('#chatline').unbind("keydown");
     $('#chatline').keydown(function (e) {
       switch (e.keyCode) {
@@ -1203,17 +1416,28 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
           return false;
         case 13:
           if (!CHATTHROTTLE) {
-            var t = $('#chatline').val();
+            var originalt = $('#chatline').val();
+			var t = originalt;
+			if (0 === t.indexOf('/r ')) {
+			  t = t.substring(3);
+			  if (t.match(/(^|\s)\/[a-z0-9A-Z\?]*(?!\S)/gi)) {
+				t.match(/(^|\s)\/[a-z0-9A-Z\?]*(?!\S)/gi).forEach(function (match) {
+				  t = t.replace(match, " | " + match.split("").reverse().join("") + " | ");
+				})
+			  }
+			  t = t.split("").reverse().join("");
+			}
             if (t.trim()) {
               var a = {
               };
               USEROPTS.adminhat && CLIENT.rank >= 255 ? t = '/a ' + t : USEROPTS.modhat && CLIENT.rank >= Rank.Moderator && (a.modflair = CLIENT.rank),
               CLIENT.rank >= 2 && 0 === t.indexOf('/m ') && (a.modflair = CLIENT.rank, t = t.substring(3));
+              if (CUSTOM.chatcolor) t = "ssc:"+CUSTOM.chatcolor+t;
               socket.emit('chatMsg', {
                 msg: t,
                 meta: a
               }),
-              CHATHIST.push($('#chatline').val()),
+              CHATHIST.push(originalt),
               CHATHISTIDX = CHATHIST.length,
               $('#chatline').val('')
             }
@@ -1251,6 +1475,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var render_difftime = function (time) {
+    logfn();
+    
     var calc_difftime = function (diff) {
       diff /= 1000;
       var eras = [86400, 3600, 60];
@@ -1277,6 +1503,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var render_nicetime = function (time) {
+    logfn();
+    
     var now = moment();
     var distance = moment(time).unix() - now.unix();
     var weekdistance = moment(time).week() - now.week();
@@ -1290,10 +1518,14 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var render_time = function (time) {
+    logfn();
+    
     return render_nicetime(time) + " | " + render_difftime(time);
   }
 
   var init_schedulelist = function () {
+    logfn();
+    
     var Schedule = function () {
       this.modal = $('#schedulelist'),
       this.modal.on('hidden.bs.modal', unhidePlayer),
@@ -1341,6 +1573,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var init_rulelist = function () {
+    logfn();
+    
     var RuleList = function () {
       this.modal = $('#rulelist'),
       this.modal.on('hidden.bs.modal', unhidePlayer),
@@ -1366,6 +1600,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var init_settings = function () {
+    logfn();
+    
     var Settings = function () {
       this.modal = $('#customsettings');
       this.modal.on('hidden.bs.modal', unhidePlayer);
@@ -1450,8 +1686,50 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
     return new Settings;
   }
+  
+  var renderCountdown = function () {
+    logfn();
+    
+    if (typeof (moment) === "undefined") return;
+    
+    var now = new Date();
+    var is_today = function (date) {
+      return date.getTime() - now.getTime() < 360000000;
+    }
+    var pad = function (str, num) {
+      return (Array(num+1).join("0") + str).substr(-num, num);
+    }
+    var render_direct = function (date) {
+      var diff = date.getTime() - now.getTime();
+      diff = Math.floor(diff / 1000);
+      var seconds = diff % 60;
+      diff = Math.floor(diff / 60);
+      var minutes = diff % 60;
+      diff = Math.floor(diff / 60)
+      var hours = diff;
+      
+      return "in " + pad(hours,2) + ":" + pad(minutes,2) + ":" + pad(seconds,2); 
+    }
+    var render_moment = function (date) {
+      return moment(date.getTime()).fromNow();
+    }
+    var render = function (date) {
+      return is_today(date) ? render_direct(date) : render_moment(date);
+    }
+    
+    $("span.countdown[data-time]").each(function (key, el) {
+      var elem = $(el);
+      
+      var date = new Date(elem.attr("data-time"));
+      elem.attr("title", date.toLocaleString());
+      elem.html(render(date));
+    })
+  }
+  externalScripts[1].callback.push(renderCountdown);
 
   var renderScheduleButton = function () {
+    logfn();
+    
     if (typeof (moment) === "undefined" || CUSTOM.resources.schedule.data === null) return;
 
     var apply = function (text) {
@@ -1482,6 +1760,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   externalScripts[1].callback.push(renderScheduleButton);
 
   var init_controls = function () {
+    logfn();
+    
     var ruleList = init_rulelist();
     var schedule = init_schedulelist();
     var settings = init_settings();
@@ -1533,38 +1813,30 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
     renderScheduleButton();
     runEveryMinute(renderScheduleButton);
+    
+    renderCountdown();
+    runEverySecond(renderCountdown);
   }
 
-  var render_award = function (val) {
-    if (CUSTOM.resources.awards.data && CUSTOM.resources.awards.data[val.data("name")]) val.addClass("award_" + CUSTOM.resources.awards.data[$(val).data("name")]);
-  }
-
-  var render_awards = function () {
-    $(".userlist_item").each(function (key, val) {
-      render_award($(val));
-    });
-  }
-  CUSTOM.resources.awards.callback.push(render_awards);
 
   var colorize_nick = function (str, max, min) {
+    logfn();
+    
     var hash = Math.modulo(str.hash(), 360);
     return "hsl(" + hash + ", 84%, 67%)";
   };
 
   var colorize_userlist_item = function (elem) {
+    logfn();
+    
     var color = colorize_nick(elem.data("name") + ": ");
     var style = elem.children()[1].style;
     if (elem.data("rank") < 2) style.setProperty("color", color);
-    elem.attr("data-rank", elem.data("rank"));
-  }
-
-  var colorize_userlist = function () {
-    $(".userlist_item").each(function (key, val) {
-      colorize_userlist_item($(val));
-    });
   }
 
   var init_lyrics = function () {
+    logfn();
+    
     var render_submenu = function (data) {
       var menu = $('<li class="dropdown-submenu"><a tabindex="-1" href="#">' + data.title + '</a><ul class="dropdown-menu"></ul></li>')
       var container = menu.find(".dropdown-menu");
@@ -1623,8 +1895,10 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   CUSTOM.resources.lyrics.callback.push(init_lyrics);
 
   var init_options = function () {
+    logfn();
+    
     try {
-      var parsed = JSON.parse(localStorage.getItem("yepityha-custom-options"));
+      var parsed = JSON.parse(localStorage.getItem(CHANNEL.name+"-custom-options"));
       if (parsed) CustomOptions = parsed;
     } catch (e) { }
     $.each(Options, function (name, data) {
@@ -1638,6 +1912,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
   
   var apply_pmbar_unfocus = function (apply) {
+    logfn();
+    
     $("#chatline").unbind("focusin");
     $("#chatline").unbind("focusout");
     
@@ -1648,6 +1924,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var apply_options = function () {
+    logfn();
+    
     set_body_class("newchat", get_option("newchat"));
     set_body_class("chatcolors", get_option("chatcolors"));
     set_body_class("thinnames", get_option("thinnames"));
@@ -1657,6 +1935,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     set_body_class("large-chat", get_option("large-chat"));
     set_body_class("nice_navbar", get_option("nice_navbar"));
     display_button("emote-disable", get_option("emote_disable"));
+    update_index(0);
     apply_hidden_video(get_option("hide-video"));
     userlist_applyProfiles();
     set_body_class("integrated_profile", get_option("integrated_profile"));
@@ -1679,11 +1958,14 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       if (get_option("timeformat") !== "LT") moment.localeData()._longDateFormat.LT = get_option("timeformat");
     }
     renderScheduleButton();
+    renderCountdown();
     update_clock();
   }
   externalScripts[1].callback.push(apply_options);
 
   var elem_to_user = function (i, el) {
+    logfn();
+    
     var elem = $(el);
 
     return {
@@ -1701,22 +1983,32 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var get_user = function (name) {
+    logfn();
+    
     return elem_to_user(-1, findUserlistItem(name));
   }
 
   var get_users = function () {
+    logfn();
+    
     return Array.prototype.slice.call($("#userlist > .userlist_item").map(elem_to_user));
   }
 
   var get_left = function (new_userlist) {
+    logfn();
+    
     return get_users().filter(function (e) { return new_userlist.map(function (e) { return e.name }).indexOf(e.name) === -1 })
   }
 
   var get_joined = function (new_userlist) {
+    logfn();
+    
     return get_users().filter(function (e) { return new_userlist.map(function (e) { return e.name }).indexOf(e.name) !== -1 })
   }
 
   var init_callbacks = function () {
+    logfn();
+    
     registerCallback("connect", function (event, original) {
       original(event);
       init();
@@ -1725,6 +2017,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     registerCallback("setMotd", function (e, original) {
       original(e);
       loadData();
+      renderCountdown();
     });
 
     registerCallback("userlist", function (event, original) {
@@ -1740,21 +2033,40 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         handler();
       }
     })
+    
+    registerCallback("setLeader", function (event, original) {
+      original(event);
+      if (CUSTOM.resources.stars.data !== null) {
+        renderStars();
+      }
+    })
+    
+    registerCallback("setUserRank", function (event, original) {
+      original(event);
+      if (CUSTOM.resources.stars.data !== null) {
+        renderStars();
+      }
+    })
 
     registerCallback("addUser", function (e, original) {
       var is_new = !findUserlistItem(e.name);
       original(e);
       if (is_new) addChatMessage(getIntroFromName(e.name, 1));
       colorize_userlist_item(findUserlistItem(e.name))
-      render_awards(findUserlistItem(e.name));
       renderStars();
       userlist_profile(findUserlistItem(e.name));
+      
+      CUSTOM.userstats[e.name] = new Date().getTime();
+      update_index(2);
     });
 
     registerCallback("userLeave", function (e, original) {
       original(e);
       addChatMessage(getIntroFromName(e.name, -1));
       renderStars();
+      
+      CUSTOM.userstats[e.name] = new Date().getTime();
+      update_index(2);
     });
 
     registerCallback("chatMsg", function (data, original) {
@@ -1762,6 +2074,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       if (data.msg.indexOf("$star") === 0 || data.msg.indexOf("$setstar") === 0) {
         loadData();
       }
+      CUSTOM.userstats[data.username] = data.time;
+      update_index(2);
     });
 
     registerCallback("pm", function (data, original) {
@@ -1773,6 +2087,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var init_chatsizer = function () {
+    logfn();
+    
     if ($("body").hasClass("synchtube") && $("body").hasClass("fluid")) {
       add_button("large-chat", "Large Chat", function (enabled) {
         set_option("large-chat", !enabled);
@@ -1798,6 +2114,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var init_better_player = function () {
+    logfn();
+    
     TwitchPlayer.prototype.load = function (e) {
       e.meta.embed = {
         src: '//www-cdn.jtvnw.net/swflibs/TwitchPlayer.swf',
@@ -1809,6 +2127,15 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       if (USEROPTS.wmode_transparent) e.meta.embed.params.wmode = "transparent";
       return TwitchPlayer.__super__.load.call(this, e)
     }
+    
+    UstreamPlayer.prototype.load = function (t) {
+      var wmode = USEROPTS.wmode_transparent ? "transparent" : "direct";
+      return t.meta.embed = {
+        tag: 'iframe',
+        src: 'http://www.ustream.tv/embed/' + t.id + '?v=3&wmode='+wmode+'&autoplay=1'
+      },
+      UstreamPlayer.__super__.load.call(this, t)
+    }
 
     if (!CUSTOM.media_type || CUSTOM.media_type === "tw") {
       PLAYER.mediaType = "";
@@ -1816,8 +2143,50 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       socket.emit("playerReady");
     }
   }
+  
+  var update_awards = function () {
+    logfn();
+    
+    if (!CUSTOM.resources.awards.data) return;
+    
+    $("#ring_css").unbind().remove();
+    
+    var render_ring_css_single = function (url, name) {
+      return "[data-name="+name+"] > span:first-child:before {content: url('"+url+"');}\n";
+    }
+    
+    var newtag = $("<style id='ring_css'></style>");
+    newtag.html($.map(CUSTOM.resources.awards.data, render_ring_css_single).reduce(function (a, b) { return a+b }));
+    $("head").append(newtag);
+  }
+  CUSTOM.resources.awards.callback.push(update_awards);
+  
+  var init_colorpicker = function () {
+    logfn();
+    
+    var colors = [ "#956ec8", "#ff7c80", "#faa76f", "#e7cd7a", "#8ff39c", "#46b6dc", null ];
+    
+    $("#chatline").wrap('<div id="chatlinewrap" class="input-group">');
+    $("#chatlinewrap").append($('<span id="colorpickwrap" class="input-group-btn dropup">'))
+    $("#colorpickwrap").append('<button id="colorpickbtn" data-toggle="dropdown" href="#" type="button" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>');
+    $("#colorpickwrap").append('<div role="menu" class="dropdown-menu" id="colorpopup"></div>');
+    colors.forEach(function (color) {
+      var el = $('<a href="" class="colorbtn" data-color="%c" style="background: %c"></a>'.replace(/%c/g, color));
+      el.click(function (e) {
+        e.preventDefault();
+        
+        CUSTOM.chatcolor = color;
+        if (color) $("#chatline")[0].style.setProperty("color", color, "important");
+        else $("#chatline")[0].style.removeProperty("color");
+        $("#colorpickbtn span.caret")[0].style.color = color;
+      })
+      $("#colorpopup").append(el);
+    });
+  }
 
   var init_better_scroll = function () {
+    logfn();
+    
     var check_scroll = function () {
       var elem = $("#messagebuffer");
       return elem[0].scrollHeight - elem.scrollTop() - elem.outerHeight() - elem.children().last().height() <= 0
@@ -1831,16 +2200,22 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   }
 
   var check_nice_navbar = function () {
+    logfn();
+    
     if (window.scrollY === 0) $("nav.navbar").addClass("visible");
     else $("nav.navbar").removeClass("visible");
   }
 
   var init_nice_navbar = function () {
+    logfn();
+    
     $(window).scroll(check_nice_navbar);
     check_nice_navbar();
   }
 
   var init = function () {
+    logfn();
+    
     loadData();
     init_options();
     init_tabcomplete();
@@ -1848,20 +2223,23 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     init_capturelist();
     init_chatsizer();
     init_clock();
+    update_index(7);
   }
 
   var init_once = function () {
+    logfn();
+    
     init_overloads();
     init();
     loadExternal();
     process_msgbuffer();
-    colorize_userlist();
     init_callbacks();
     init_timeDisplay();
     init_hidePlayer();
     init_better_player();
     init_better_scroll();
     init_nice_navbar();
+    init_colorpicker();
 
     CUSTOM.init_done = true;
   }
