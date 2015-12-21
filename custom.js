@@ -140,6 +140,13 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       "displayname": "Hide Video",
       "type": "none",
       "default": false
+    },
+    "snow": {
+      "displayanme": "Snow",
+      "type": "toggle",
+      "names": ["", ""],
+      "values": [false, true],
+      "default": false
     }
   }
    
@@ -1960,6 +1967,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     renderScheduleButton();
     renderCountdown();
     update_clock();
+    set_body_class("snow", get_option("snow"));
   }
   externalScripts[1].callback.push(apply_options);
 
