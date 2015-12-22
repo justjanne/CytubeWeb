@@ -713,7 +713,7 @@ video.channel-emote {
   animation-play-state: running;
 }
 
-.snow #mainpage {
+.snow #mainpage, .chatOnly.snow #chatwrap {
   background-image: url("//b.thumbs.redditmedia.com/OdcRQL9gi4eUxyPXqDtDWdRukGj7yxz4UtxLdDZUdZQ.png"), url("//b.thumbs.redditmedia.com/0o8P7ZNL_G87asJqArZneHd_lDOsJfPnKNbOFLUf1ik.png"), url("//b.thumbs.redditmedia.com/qmkwjr9UVRDmV9MBibRDVLWEUVLrFEtTXXuAn3TfJ9Q.png");
   animation: 20s linear 0s normal none infinite running snow;
 }
