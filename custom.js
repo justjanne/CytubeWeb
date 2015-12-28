@@ -1561,10 +1561,11 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         var event = {
           title: data[0],
           time: data[1],
-          region: data[2]
+          region: data[2],
+          link: data[3] || ""
         };
-        if (CUSTOM.mobile) return '<tr><td class="vertical-middle">' + event.title + (event.region ?  ' [' + event.region + ']' : "") + '</td><td class="text-left vertical-middle">' + render_nicetime(event.time) + '<br>' + render_difftime(event.time) + '</td></tr>';
-        else return '<tr><td class="vertical-middle">' + event.title + '</td><td class="vertical-middle">' + (event.region || "") + '</td><td class="text-left vertical-middle">' + render_nicetime(event.time) + '</td><td class="text-left vertical-middle">' + render_difftime(event.time) + '</td></tr>';
+        if (CUSTOM.mobile) return '<tr><td class="vertical-middle"><a href="' + event.link + '">' + event.title + (event.region ?  ' [' + event.region + ']' : "") + '</a></td><td class="text-left vertical-middle">' + render_nicetime(event.time) + '<br>' + render_difftime(event.time) + '</td></tr>';
+        else return '<tr><td class="vertical-middle"><a href="' + event.link + '">' + event.title + '</a></td><td class="vertical-middle">' + (event.region || "") + '</td><td class="text-left vertical-middle">' + render_nicetime(event.time) + '</td><td class="text-left vertical-middle">' + render_difftime(event.time) + '</td></tr>';
       }
       
       if (CUSTOM.mobile) $(this.modal).find("thead").html("<tr><th>Event</th>><th>Time</th></tr>");
