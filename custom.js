@@ -1950,7 +1950,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     set_body_class("large-chat", get_option("large-chat"));
     set_body_class("nice_navbar", get_option("nice_navbar"));
     display_button("emote-disable", get_option("emote_disable"));
-    display_button("visited-links", get_option("visited_links"));
+    set_body_class("visited-links", get_option("visited_links"));
     update_index(0);
     apply_hidden_video(get_option("hide-video"));
     userlist_applyProfiles();
