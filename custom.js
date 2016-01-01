@@ -2229,10 +2229,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     $(window).scroll(check_nice_navbar);
     check_nice_navbar();
   }
-  
-    var init_map = function () {
-    $("#motdrow").before('<div id="map"><div style="height: 276px; width: 481px; margin: 1rem auto;" id="mapcontainer"><iframe src="https://cdn.kuschku.de/newyear/frame/" id="map" style="height: 551px; width: 961px; border: medium none; transform: scale(0.5); margin: -138px 0px 0px -240px;"></iframe></div></div>')
-  }
 
   var init = function () {
     logfn();
@@ -2261,7 +2257,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     init_better_scroll();
     init_nice_navbar();
     init_colorpicker();
-    init_map();
 
     CUSTOM.init_done = true;
   }
