@@ -2166,7 +2166,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     
     if (!CUSTOM.resources.awards.data) return;
     
-     $("#ring_css").unbind().remove();
+     //$("#ring_css").unbind().remove();
     
     var render_ring_css_single = function (userData) {
       if (userData.length < 2) return;
@@ -2188,6 +2188,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     }
   }
   CUSTOM.resources.awards.callback.push(update_awards);
+  update_awards();
   
   var init_colorpicker = function () {
     logfn();
