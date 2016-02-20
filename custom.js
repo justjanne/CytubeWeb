@@ -2166,8 +2166,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     
     if (!CUSTOM.resources.awards.data) return;
     
-     //$("#ring_css").unbind().remove();
-    
     var render_ring_css_single = function (userData) {
       if (userData.length < 2) return;
       var iconHTML = "";
