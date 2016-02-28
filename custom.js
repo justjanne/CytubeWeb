@@ -2187,12 +2187,15 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       return [userData[0], iconHTML];
     };
     
-    $("#chatheader").append("<span id='iconsList'></span>");
     var icons = $.map(CUSTOM.resources.awards.data, render_ring_css_single);
+    
     for (var i = 0; i < icons.length; i+=2) {
-    	if($("#userlist [data-name='"+icons[i]+"']").length) {
-    	    $("#userlist [data-name='"+icons[i]+"']").append("<span id='"+icons[i]+"Icons'>"+icons[i+1]+"</span>");
-    	}
+    	$.each($('.userlist_item'), function (key, value) {
+            var elem = $(value);
+            if (elem.children()[1].html() == icons[i]) {
+            	elem.prepend("<span id='"+icons[i]+"Icons'>"+icons[i+1]+"</span>");
+            }
+        });
     }
   }
   CUSTOM.resources.awards.callback.push(update_awards);
