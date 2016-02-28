@@ -2190,8 +2190,8 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     var icons = $.map(CUSTOM.resources.awards.data, render_ring_css_single);
     
     for (var i = 0; i < icons.length; i+=2) {
-    	if ($("div[data-name='"+icons[i]+"']") != null) {
-    		$("div[data-name='"+icons[i]+"'] span:nth-child(1)").append(icons[i+1]);
+    	if ($("div[data-name='"+icons[i]+"']").length) {
+    		$("div[data-name='"+icons[i]+"'] > span:nth-child(1)").append(icons[i+1]);
     	}
     }
   }
