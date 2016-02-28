@@ -2179,20 +2179,18 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       var iconHTML = "";
       for (var i = 1; i < userData.length; i++) {
         if (userData[i].includes("http://")) {
-          iconHTML += "<span class=\"icon\"><img src='"+userData[i]+"'></span>";
+          iconHTML += "<span class=\"icon"+i+"\"><img src='"+userData[i]+"'></span>";
         } else {
-          iconHTML += "<span class=\"icon\">"+userData[i]+"</span>";
+          iconHTML += "<span class=\"icon"+i+"\">"+userData[i]+"</span>";
         }
       }
       return [userData[0], iconHTML];
     };
     
+    $("#chatheader").append("<span id='iconsList'></span>");
     var icons = $.map(CUSTOM.resources.awards.data, render_ring_css_single);
-    
     for (var i = 0; i < icons.length; i+=2) {
-    	if ($("div[data-name='"+icons[i]+"']").length) {
-    		$("div[data-name='"+icons[i]+"'] > span:nth-child(1)").append(icons[i+1]);
-    	}
+    	$("#iconsList").append("<span id='"+icons[i]+"Icons'>"+icons[i+1]+"</span>");
     }
   }
   CUSTOM.resources.awards.callback.push(update_awards);
