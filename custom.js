@@ -2193,7 +2193,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     	$.each($('.userlist_item'), function (key, value) {
             var elem = $(value);
             if ($(elem.children()[1]).html() == icons[i]) {
-            	$(elem.children()[0]).after("<span id='"+icons[i]+"Icons'>"+icons[i+1]+"</span>");
+            	$(elem.children()[0]).append(icons[i+1]);
             }
         });
     }
