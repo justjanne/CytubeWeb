@@ -173,7 +173,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         "data": null,
       },
       "awards": {
-        "url": "https://rawgit.com/lb77/CytubeWeb/master/data/awards.json",
+        "url": path + "data/awards.json",
         "callback": [],
         "data": null,
       },
@@ -2174,29 +2174,17 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     
     if (!CUSTOM.resources.awards.data) return;
     
-    var render_ring_css_single = function (userData) {
-      if (userData.length < 2) return;
-      var iconHTML = "";
-      for (var i = 1; i < userData.length; i++) {
-        if (userData[i].includes("http://")) {
-          iconHTML += "<span class=\"icon\"><img src='"+userData[i]+"'></span>";
-        } else {
-          iconHTML += "<span class=\"icon\">"+userData[i]+"</span>";
-        }
-      }
-      return [userData[0], iconHTML];
-    };
+    $("#ring_css").unbind().remove();
     
-    var icons = $.map(CUSTOM.resources.awards.data, render_ring_css_single);
-    
-    for (var i = 0; i < icons.length; i+=2) {
-    	if ($("div[data-name='"+icons[i]+"']") != null) {
-    		$("div[data-name='"+icons[i]+"'] span:nth-child(1)").append(icons[i+1]);
-    	}
+    var render_ring_css_single = function (url, name) {
+      return "[data-name="+name+"] > span:first-child:before {content: url('"+url+"');}\n";
     }
+    
+    var newtag = $("<style id='ring_css'></style>");
+    newtag.html($.map(CUSTOM.resources.awards.data, render_ring_css_single).reduce(function (a, b) { return a+b }));
+    $("head").append(newtag);
   }
   CUSTOM.resources.awards.callback.push(update_awards);
-  update_awards();
   
   var init_colorpicker = function () {
     logfn();
