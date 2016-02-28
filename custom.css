@@ -334,7 +334,7 @@ body.intro_disable [data-type="intro"] {
   width: auto;
 }
 
-[data-star="2"] > span:first-child:before {
+[data-star="2"] > span:first-child:after {
   margin: 0 !important;
   padding: 0px !important;
   content: "★";
