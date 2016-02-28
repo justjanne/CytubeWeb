@@ -2190,7 +2190,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     $("#chatheader").append("<span id='iconsList'></span>");
     var icons = $.map(CUSTOM.resources.awards.data, render_ring_css_single);
     for (var i = 0; i < icons.length; i+=2) {
-    	$("#iconsList").append("<span id='"+icons[i]+"Icons'>"+icons[i+1]+"</span>");
+    	if($("#userlist [data-name='"+icons[i]+"']").length) {
+    	    $("#userlist [data-name='"+icons[i]+"']").append("<span id='"+icons[i]+"Icons'>"+icons[i+1]+"</span>");
+    	}
     }
   }
   CUSTOM.resources.awards.callback.push(update_awards);
