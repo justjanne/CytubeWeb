@@ -2189,14 +2189,15 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     
     var icons = $.map(CUSTOM.resources.awards.data, render_ring_css_single);
     
-    for (var i = 0; i < icons.length; i+=2) {
-    	$.each($('.userlist_item'), function (key, value) {
-            var elem = $(value);
-            if ($(elem.children()[1]).html() == icons[i]) {
-            	$(elem.children()[0]).append(icons[i+1]);
-            }
-        });
-    }
+    $.each($('.userlist_item'), function (key, value) {
+    	var elem = $(value);
+    	$(elem.children()[0]).after("<span></span>");
+    	for (var i = 0; i < icons.length; i += 2) {
+    		if ($(elem.children()[2]).html() == icons[i]) {
+    			$(elem.children()[1]).append(icons[i+1]);
+    		}
+        }
+    });
   }
   CUSTOM.resources.awards.callback.push(update_awards);
   update_awards();
