@@ -2201,7 +2201,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     }
   }
   CUSTOM.resources.awards.callback.push(update_awards);
-  //update_awards();
+  update_awards();
   
   var init_colorpicker = function () {
     logfn();
