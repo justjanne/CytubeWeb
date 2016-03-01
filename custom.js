@@ -711,7 +711,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       $("<span/>").addClass("glyphicon glyphicon-star-empty").appendTo(icons);
     }
     if (userdata.afk) {
-      if ($(icons+" .glyphicon-time")) $(icons+" .glyphicon-time").remove();
+      $(icons).find(".glyphicon-time").remove();
       name.css("font-style", "italic");
       $("<span/>").addClass("glyphicon glyphicon-time").appendTo(icons);
     }
