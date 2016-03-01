@@ -173,7 +173,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         "data": null,
       },
       "awards": {
-        "url": path + "data/awards.json",
+        "url": "https://rawgit.com/lb77/CytubeWeb/master/data/awards.json",
         "callback": [],
         "data": null,
       },
@@ -217,7 +217,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   var externalScripts = [
     {
       "type": "css",
-      "url": path + "custom.css",
+      "url": "https://rawgit.com/lb77/CytubeWeb/master/custom.css",
       "callback": []
     },
     {
