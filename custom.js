@@ -708,14 +708,16 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
     var icons = div.children()[0];
     if (userdata.leader) {
+      $(icons).find(".glyphicon-star-empty").remove();
       $("<span/>").addClass("glyphicon glyphicon-star-empty").appendTo(icons);
     }
     if (userdata.afk) {
       $(icons).find(".glyphicon-time").remove();
       name.css("font-style", "italic");
       $("<span/>").addClass("glyphicon glyphicon-time").appendTo(icons);
-    }
+    } else { $(icons).find(".glyphicon-time").remove(); }
     if (userdata.icon) {
+      $(icons).find(userdata.icon).remove();
       $("<span/>").addClass("glyphicon " + userdata.icon).prependTo(icons);
     }
     if (CUSTOM.resources.stars.data.hasOwnProperty(userdata.name)) {
