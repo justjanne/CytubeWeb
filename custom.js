@@ -25,6 +25,107 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   debug: false
 };
 
+formatUserlistItem = function(div) {
+    var data = {
+        name: div.data("name") || "",
+        rank: div.data("rank"),
+        profile: div.data("profile") || { image: "", text: ""},
+        leader: div.data("leader") || false,
+        icon: div.data("icon") || false,
+        afk: div.data("afk") || false
+    };
+    var name = $(div.children()[1]);
+    name.removeClass();
+    name.css("font-style", "");
+    name.addClass(getNameColor(data.rank));
+    div.find(".profile-box").remove();
+
+    if (data.afk) {
+        div.addClass("userlist_afk");
+    } else {
+        div.removeClass("userlist_afk");
+    }
+
+    if (div.data("meta") && div.data("meta").muted) {
+        div.addClass("userlist_muted");
+    } else {
+        div.removeClass("userlist_muted");
+    }
+
+    if (div.data("meta") && div.data("meta").smuted) {
+        div.addClass("userlist_smuted");
+    } else {
+        div.removeClass("userlist_smuted");
+    }
+
+    var profile = null;
+    /*
+     * 2015-10-19
+     * Prevent rendering unnecessary duplicates of the profile box when
+     * a user's status changes.
+     */
+    name.unbind("mouseenter");
+    name.unbind("mousemove");
+    name.unbind("mouseleave");
+
+    name.mouseenter(function(ev) {
+        if (profile)
+            profile.remove();
+
+        var top = ev.clientY + 5;
+        var horiz = ev.clientX;
+        profile = $("<div/>")
+            .addClass("profile-box linewrap")
+            .css("top", top + "px")
+            .appendTo(div);
+
+        if(data.profile.image) {
+            $("<img/>").addClass("profile-image")
+                .attr("src", data.profile.image)
+                .appendTo(profile);
+        }
+        $("<strong/>").text(data.name).appendTo(profile);
+
+        var meta = div.data("meta") || {};
+        if (meta.ip) {
+            $("<br/>").appendTo(profile);
+            $("<em/>").text(meta.ip).appendTo(profile);
+        }
+        if (meta.aliases) {
+            $("<br/>").appendTo(profile);
+            $("<em/>").text("aliases: " + meta.aliases.join(", ")).appendTo(profile);
+        }
+        $("<hr/>").css("margin-top", "5px").css("margin-bottom", "5px").appendTo(profile);
+        $("<p/>").text(data.profile.text).appendTo(profile);
+
+        if ($("body").hasClass("synchtube")) horiz -= profile.outerWidth();
+        profile.css("left", horiz + "px")
+    });
+    name.mousemove(function(ev) {
+        var top = ev.clientY + 5;
+        var horiz = ev.clientX;
+
+        if ($("body").hasClass("synchtube")) horiz -= profile.outerWidth();
+        profile.css("left", horiz + "px")
+            .css("top", top + "px");
+    });
+    name.mouseleave(function() {
+        profile.remove();
+    });
+    var icon = div.children()[0];
+    // denote current leader with a star
+    if(data.leader) {
+        $("<span/>").addClass("glyphicon glyphicon-star-empty").appendTo(icon);
+    }
+    if(data.afk) {
+        name.css("font-style", "italic");
+        $("<span/>").addClass("glyphicon glyphicon-time").appendTo(icon);
+    }
+    if (data.icon) {
+        $("<span/>").addClass("glyphicon " + data.icon).prependTo(icon);
+    }
+}
+
 (function () {
   var path;
   // Store original Cytube callbacks 
