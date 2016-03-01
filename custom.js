@@ -707,7 +707,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     div.toggleClass("userlist_smuted", userdata.meta.hasOwnProperty("smuted") && userdata.meta.smuted);
 
     var icons = div.children()[0];
-    icons.innerHTML = "";
     if (userdata.leader) {
       $("<span/>").addClass("glyphicon glyphicon-star-empty").appendTo(icons);
     }
