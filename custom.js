@@ -173,7 +173,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         "data": null,
       },
       "awards": {
-        "url": "https://rawgit.com/lb77/CytubeWeb/master/data/awards.json",
+        "url": path + "data/awards.json",
         "callback": [],
         "data": null,
       },
@@ -217,7 +217,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   var externalScripts = [
     {
       "type": "css",
-      "url": "https://rawgit.com/lb77/CytubeWeb/master/custom.css",
+      "url": path + "custom.css",
       "callback": []
     },
     {
@@ -2176,7 +2176,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     
     if (!CUSTOM.resources.awards.data) return;
     
-    var render_ring_css_single = function (userData) {
+    var render_icon_html_single = function (userData) {
       if (userData.length < 2) return;
       var iconHTML = "";
       for (var i = 1; i < userData.length; i++) {
@@ -2189,7 +2189,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       return [userData[0], iconHTML];
     };
     
-    var icons = $.map(CUSTOM.resources.awards.data, render_ring_css_single);
+    var icons = $.map(CUSTOM.resources.awards.data, render_icon_html_single);
     
     for (var i = 0; i < icons.length; i+=2) {
     	$.each($('.userlist_item'), function (key, value) {
@@ -2201,7 +2201,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     }
   }
   CUSTOM.resources.awards.callback.push(update_awards);
-  update_awards();
   
   var init_colorpicker = function () {
     logfn();
