@@ -122,7 +122,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       "type": "toggle",
       "names": ["", ""],
       "values": [false, true],
-      "default": false
+      "default": true
     },
     "pmbar_unfocus": {
       "displayname": "Hide PM windows without new PMs when typing in chatbar",
