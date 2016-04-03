@@ -1,13 +1,16 @@
 {
     "1": "No racism, no sexism, or any other forms of bigotry or discriminatory content. This includes chat messages, links to images, gifs, articles, as well as videos.",
-    "2": "Be respectful. No defamation of or insulting other users in chat. Do not harass people in public nor PMs. Do not even attempt to doxx someone. We take this very seriously.",
-    "3": "Do not share PMs that were shared with a reasonable expectation of confidence.  If you're being harassed however, we encourage you to share it with a mod or admin.",
+    "2": "Be respectful. No defamation of or insulting other users in chat. Do not harass people in public nor PMs. If they ask you to stop, stop. Even if you’re joking, if it's obvious that the butt of the joke is not happy with what you are saying, and you keep doing it, that is on you. Do not even attempt to doxx someone -- we take this very seriously, and it will result in an instant IP ban.",
+    "3": "Do not share PMs unless given explicit permission. This applies to any people logged onto the stream. Exceptions are when you can absolutely share something -- e.g. satirical or made to be shared. If you are being abused, however, you are welcome to share it with a mod/admin privately.",
     "5": "Do not add any videos of or embed any NSFW or NSFL content. Tag NSFW and NSFL links in chat accordingly. This includes all shocking content and anything that could trigger an epileptic attack.",
-    "6": "No spamming or repetitive messages of any kind.  Use a maximum of 3 unique emotes at once. Do not abuse or spam $ commands. Remember: you can PM TARS!",
-    "7": "No spoilers of movies, series or games we have been or are currently watching or that are scheduled for future viewings. Use tagged spoiler tags if you want to discuss.",
-    "8": "Do not post any leaked or unreleased content in the playlist. This is per request of CyTube. Not abiding by this rule could get our channel banned.",
-    "9": "Keep the chat English only. You are permitted to post single messages, greetings or thanks in other languages, but anything beyond that should be kept to PMs.",
-    "10": "Do not try to manipulate polls or manipulate others into voting for what you want. Neither those here on CyTube nor any linked in the MOTD.",
-    "11": "Generally act in good faith. Don't push the boundaries of what you can get away with. We don't have a detailed law book, we expect you to act in the spirit of our rules. Admins and mods will decide punishments on a case by case basis.",
-    "12": "(There's still no rule #4)"
+    "6": "Use a maximum of 5 emotes at once; this includes multiple messages before someone else speaks. If you are using 5, however, please keep to 1-150 pixel wide emotes for most of them -- using 5 larger emotes like /poler10-xmas is not allowed. Even though the limit is 5, please be considerate of mobile users.",
+    "7": "Please don’t spam the chat with messages. Talking or telling a long story is obviously fine. Do not abuse or spam $ commands. Remember: you can PM TARS to use commands!",
+    "8": "No spoilers of movies, series or games we have been or are currently watching or that are scheduled for future viewings. Use tagged spoiler tags if you want to discuss.",
+    "9": "Do not post any leaked or unreleased content in the playlist. This is per request of CyTube. Not abiding by this rule could get our channel banned.",
+    "10": "Keep the chat English only. You are permitted to post single messages, greetings or thanks in other languages, but anything beyond that should be kept to PMs.",
+    "11": "Do not try to manipulate polls or manipulate others into voting for what you want. This applies to those here on CyTube and any linked in the MOTD. This does not mean you cannot give reasons for why someone should or shouldn't vote for something.",
+    "12": "Generally act in good faith. Don't push the boundaries of what you can get away with. We don't have a detailed law book -- we expect you to act in the spirit of our rules. Admins and mods will decide punishments on a case by case basis. This includes doing anything against the rules while any mods/admins are not here. If you are unsure, ask.",
+    "13": "Currently there is no way of tracking coin payouts for actions/rewards (aside from automated ones), so please do not try and sneak extra coins or do extra betting by asking multiple mods when others are not around. Also, please don’t trick others into giving you coins.",
+    "14": "All rules above apply if you are talking from outside the stream (via IRC, for example). By using outside means, be aware you are subject to the same rules/stipulations. Don’t be afraid if you mess up by mistake, it happens. You will never be banned/permabanned for a single mistake or small offence, it would have to be a serious situation.",
+    "15": "There will never be a rule 4"
 }
