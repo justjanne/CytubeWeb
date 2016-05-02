@@ -122,7 +122,14 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       "type": "toggle",
       "names": ["", ""],
       "values": [false, true],
-      "default": false
+      "default": true
+    },
+    "titles": {
+      "displayname": "Show Titles",
+      "type": "toggle",
+      "names": ["", ""],
+      "values": [false, true],
+      "default": true
     },
     "pmbar_unfocus": {
       "displayname": "Hide PM windows without new PMs when typing in chatbar",
@@ -1985,6 +1992,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     update_clock();
     set_body_class("snow", get_option("snow"));
     set_body_class("banner", get_option("banner"));
+    set_body_class("titles", get_option("titles"));
   }
   externalScripts[1].callback.push(apply_options);
 
