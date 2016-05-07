@@ -37,9 +37,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     path = "http://localhost.kuschku.de/";
     CUSTOM.debug = true;
   } else if (window.location.hash === "#old") {
-    path = "https://ssl.kuschku.de/cdn/"
+    path = "https://cdn.kuschku.de/"
   } else {
-    path = "https://ssl.kuschku.de/cdn/beta/"
+    path = "https://cdn.kuschku.de/beta/"
   }
   
   var logfn = function () {
