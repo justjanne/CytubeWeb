@@ -1830,7 +1830,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     $("#btn_ruleslist").hide();
 
     $("#emotelistbtn").click(function () {
-      EMOTELIST.show();
+      EMOTELISTMODAL.modal();
     });
 
     renderScheduleButton();
