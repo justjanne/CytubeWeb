@@ -509,7 +509,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       return false;
     });
     add_button("emote-list", "Emote List", function () {
-      EMOTELIST.show();
+      EMOTELISTMODAL.modal()
       return false;
     });
 
