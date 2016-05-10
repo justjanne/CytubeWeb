@@ -821,34 +821,34 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     logfn();
     
     var embed_image = function (msg) {
-      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!!\<\/a\>/ig,
         '<a href="$1$2" target="_blank"><span class="emote-fallback">$1$2</span><video src="$1$2" class="channel-user-emote" autoplay muted loop webkit-playsinline/></a>');
-      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.webm|\.mp4)!\<\/a\>/ig,
         '<a href="$1$2" target="_blank"><span class="emote-fallback">$1$2</span><video src="$1$2" class="channel-emote" autoplay muted loop webkit-playsinline/></a>');
         
-      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!!\<\/a\>/ig,
         '<a href="$1.webm" target="_blank"><span class="emote-fallback">$1.webm</span><video src="$1.webm" class="channel-user-emote" autoplay muted loop webkit-playsinline/></a>');
-      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!\<\/a\>/ig,
         '<a href="$1.webm" target="_blank"><span class="emote-fallback">$1.webm</span><video src="$1.webm" class="channel-emote" autoplay muted loop webkit-playsinline/></a>');
         
-      msg = msg.replace(/\<a href=\"(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\"\>(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
         '<a href="http://gfycat.com$2" target="_blank"><span class="emote-fallback">http://gfycat.com$2</span><video class="channel-user-emote" autoplay loop muted webkit-playsinline><source src="http://zippy.gfycat.com$2.webm"><source src="http://fat.gfycat.com$2.webm"><source src="http://giant.gfycat.com$2.webm"></video></a>');
-      msg = msg.replace(/\<a href=\"(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\"\>(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
         '<a href="http://gfycat.com$2" target="_blank"><span class="emote-fallback">http://gfycat.com$2</span><video class="channel-emote" autoplay loop muted webkit-playsinline><source src="http://zippy.gfycat.com$2.webm"><source src="http://fat.gfycat.com$2.webm"><source src="http://giant.gfycat.com$2.webm"></video></a>');
         
-      msg = msg.replace(/\<a href=\"(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\"\>(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
         '<a href="https://streamable.com$2" target="_blank"><span class="emote-fallback">https://streamable.com$2</span><video class="channel-user-emote" autoplay loop muted webkit-playsinline><source src="https://cdn.streamable.com/video/webm$2.webm"></video></a>');
-      msg = msg.replace(/\<a href=\"(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\"\>(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
         '<a href="https://streamable.com$2" target="_blank"><span class="emote-fallback">https://streamable.com$2</span><video class="channel-emote" autoplay loop muted webkit-playsinline><source src="https://cdn.streamable.com/video/webm$2.webm"></video></a>');
         
-      msg = msg.replace(/\<a href=\"(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\"\>(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
         '<a href="https://imgur.com$2" target="_blank"><span class="emote-fallback">https://imgur.com$2</span><img class="channel-user-emote" src="https://i.imgur.com/$2.png"></img></a>');
-      msg = msg.replace(/\<a href=\"(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\"\>(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/imgur\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
         '<a href="https://imgur.com$2" target="_blank"><span class="emote-fallback">https://imgur.com$2</span><img class="channel-emote" src="https://i.imgur.com/$2.png"></img></a>');
       
-      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
         '<a href="$1" target="_blank"><span class="emote-fallback">$1</span><img src="$1" class="channel-user-emote" /></a>');
-      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
+      msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
         '<a href="$1" target="_blank"><span class="emote-fallback">$1</span><img src="$1" class="channel-emote" /></a>');
       return msg;
     }
