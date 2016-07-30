@@ -979,12 +979,31 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       if (msg.msg.startsWith(escape+"i"+escape)) {
         var username = msg.msg.substr((escape+"i"+escape).length, msg.msg.indexOf(":") - (escape+"i"+escape).length);
         username = $("<p>").html(username).text();
-        return {
-          username: username,
-          msg: msg.msg.substr(msg.msg.indexOf(":") + 2),
-          meta: { addClass: "ghost", addClassToNameAndTimestamp: "ghost" },
-          time: msg.time
-        };
+		    
+        var ignoreList = $("#ircNames option");
+        var match = false;
+        $.each(ignoreList, function(key, obj) {
+          if (obj.value.toLowerCase() == username.toLowerCase()) {
+            match = true;
+            return;
+          }
+        });
+        
+        if (match) {
+          return {
+            username: username,
+            msg: msg.msg.substr(msg.msg.indexOf(":") + 2),
+            meta: { addClass: "ignore ghost", addClassToNameAndTimestamp: "ignore ghost" },
+            time: msg.time
+          };
+        } else {
+          return {
+            username: username,
+            msg: msg.msg.substr(msg.msg.indexOf(":") + 2),
+            meta: { addClass: "ghost", addClassToNameAndTimestamp: "ghost" },
+            time: msg.time
+          };
+        }
       } else {
         return msg;
       }
@@ -1261,7 +1280,57 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       return false;
     });
   }
+  
+  var init_ignoreirc = function () {
+    logfn();
+    
+    var IgnoreIRC = function () {
+      this.modal = $('#ignoreirc'),
+      this.modal.on('hidden.bs.modal', unhidePlayer),
+      this.ignoreList = document.querySelector('#ignoreirc #list')
+    };
+    IgnoreIRC.prototype.show = function () {
+      hidePlayer();
+      this.load();
+      this.modal.modal();
+    },
+    IgnoreIRC.prototype.load = function (e) {
+    }
 
+    $("#ignoreirc").unbind().remove();
+    $("#emotelist").after('<div style="display: none;" id="ignoreirc" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade"><div class="modal-dialog modal-dialog-fluid"><div class="modal-content"><div class="modal-header"><button data-dismiss="modal" aria-hidden="true" class="close">×</button><h4>IRC Ignore List</h4></div><div class="modal-body"><input id="ircUser" type="text"></input><button id="irc_user_add" class="btn btn-default">Add</button><select id="ircNames" multiple="multiple" class="form-control"></select><button id="irc_user_remove" class="btn btn-default">Remove</button></div><div class="modal-footer"></div></div></div></div>');
+    $("#irc_user_add").click(function() {
+      var nick = $("#ircUser").val();
+      $("#ircNames").append("<option value='"+nick+"'>"+nick+"</option>");
+      
+      var msgs = $("#messagebuffer div").filter(function() {
+        return $(this).attr('class').toLowerCase().indexOf('chat-msg-'+nick.toLowerCase()) > -1;
+      });
+      $(msgs).css("display", "none");
+    });
+    
+    $("#irc_user_remove").click(function() {
+      var nicks = $("#ircNames option:selected");
+      nicks.each(function(index, obj) {
+        var msgs = $("#messagebuffer div").filter(function() {
+          return $(this).attr('class').toLowerCase().indexOf('chat-msg-'+obj.value.toLowerCase()) > -1;
+        });
+        
+        $(msgs).css("display", "");
+        $(msgs).children().removeClass("ignore");
+      });
+      
+      $("#ircNames option:selected").remove()
+    });
+    
+    var IGNOREIRC = new IgnoreIRC;
+    
+    add_button("ignore_irc", "IRC Ignore List", function () {
+      IGNOREIRC.show();
+      return false;
+    });
+  }
+  
   var update_clock = function () {
     logfn();
     
@@ -2246,6 +2315,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     init_tabcomplete();
     init_controls();
     init_capturelist();
+    init_ignoreirc();
     init_chatsizer();
     init_clock();
     update_index(7);
