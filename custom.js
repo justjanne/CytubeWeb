@@ -34,7 +34,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   var CustomOptions = {};
 
   if (window.location.hash === "#debug") {
-    path = "http://localhost.kuschku.de/";
+    path = "https://localhost.kuschku.de/";
     CUSTOM.debug = true;
   } else if (window.location.hash === "#old") {
     path = "https://cdn.kuschku.de/"
@@ -832,9 +832,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         '<a href="$1.webm" target="_blank"><span class="emote-fallback">$1.webm</span><video src="$1.webm" class="channel-emote" autoplay muted loop webkit-playsinline/></a>');
         
       msg = msg.replace(/\<a href=\"(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
-        '<a href="http://gfycat.com$2" target="_blank"><span class="emote-fallback">http://gfycat.com$2</span><video class="channel-user-emote" autoplay loop muted webkit-playsinline><source src="http://zippy.gfycat.com$2.webm"><source src="http://fat.gfycat.com$2.webm"><source src="http://giant.gfycat.com$2.webm"></video></a>');
+        '<a href="https://gfycat.com$2" target="_blank"><span class="emote-fallback">https://gfycat.com$2</span><video class="channel-user-emote" autoplay loop muted webkit-playsinline><source src="https://zippy.gfycat.com$2.webm"><source src="https://fat.gfycat.com$2.webm"><source src="https://giant.gfycat.com$2.webm"></video></a>');
       msg = msg.replace(/\<a href=\"(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!\<\/a\>/ig,
-        '<a href="http://gfycat.com$2" target="_blank"><span class="emote-fallback">http://gfycat.com$2</span><video class="channel-emote" autoplay loop muted webkit-playsinline><source src="http://zippy.gfycat.com$2.webm"><source src="http://fat.gfycat.com$2.webm"><source src="http://giant.gfycat.com$2.webm"></video></a>');
+        '<a href="https://gfycat.com$2" target="_blank"><span class="emote-fallback">https://gfycat.com$2</span><video class="channel-emote" autoplay loop muted webkit-playsinline><source src="https://zippy.gfycat.com$2.webm"><source src="https://fat.gfycat.com$2.webm"><source src="https://giant.gfycat.com$2.webm"></video></a>');
         
       msg = msg.replace(/\<a href=\"(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/streamable\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
         '<a href="https://streamable.com$2" target="_blank"><span class="emote-fallback">https://streamable.com$2</span><video class="channel-user-emote" autoplay loop muted webkit-playsinline><source src="https://cdn.streamable.com/video/webm$2.webm"></video></a>');
@@ -2157,7 +2157,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       var wmode = USEROPTS.wmode_transparent ? "transparent" : "direct";
       return t.meta.embed = {
         tag: 'iframe',
-        src: 'http://www.ustream.tv/embed/' + t.id + '?v=3&wmode='+wmode+'&autoplay=1'
+        src: 'https://www.ustream.tv/embed/' + t.id + '?v=3&wmode='+wmode+'&autoplay=1'
       },
       UstreamPlayer.__super__.load.call(this, t)
     }

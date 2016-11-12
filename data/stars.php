@@ -1,5 +1,5 @@
 <?php
-    $db = new PDO('sqlite:/opt/cytube/cytubebot.db');
+    $db = new PDO('sqlite:/var/www/CytubeBot/cytubebot.db');
     $sql = "SELECT uname, award FROM users ORDER BY uname";
 
     $response = Array();
@@ -10,5 +10,8 @@
 	        $response[$name] = $datum["award"];
 	}
     }
-    echo json_encode($response);
+
+    header("Access-Control-Allow-Origin: *");
+    header('Content-Type: application/json');
+    echo json_encode($response)."\n";
 ?>
