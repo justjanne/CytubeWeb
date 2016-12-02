@@ -536,6 +536,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
 
     var profile = $("<div/>").addClass("profile-box linewrap").appendTo(elem);
     if (userdata.profile.image) {
+      if (userdata.profile.image.indexOf("https://") !== 0 && userdata.profile.image.indexOf("://") !== 0 && userdata.profile.image.indexOf("://") !== -1)
+        userdata.profile.image = "https://i.imgur.com/removed.png";
+      
       $("<img/>").addClass("profile-image").attr("src", userdata.profile.image).appendTo(profile);
     }
 
