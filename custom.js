@@ -32,6 +32,10 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   // Store even handlers
   var Handlers = {};
   var CustomOptions = {};
+  
+  if (window.location.protocol) === "http:" {
+    window.location.href = window.location.href.replace("http://", "https://")
+  }
 
   if (window.location.hash === "#debug") {
     path = "https://localhost.kuschku.de/";
