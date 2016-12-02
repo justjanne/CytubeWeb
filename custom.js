@@ -33,7 +33,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   var Handlers = {};
   var CustomOptions = {};
   
-  if (window.location.protocol) === "http:" {
+  if (window.location.protocol === "http:") {
     window.location.href = window.location.href.replace("http://", "https://")
   }
 
