@@ -696,8 +696,29 @@ video.channel-emote {
   display: none;
 }
 
-.mirror .heavy .channel-emote {
-  display: none;
+.flip .channel-emote {
+    -webkit-transform: scale(1, -1);
+    -moz-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);
+}
+.flip .mirror .channel-emote, .mirror .flip .channel-emote {
+    -webkit-transform: scale(-1, -1);
+    -moz-transform: scale(-1, -1);
+    -o-transform: scale(-1, -1);
+    -ms-transform: scale(-1, -1);
+    transform: scale(-1, -1);
+}
+.flip .heavy .channel-emote { 
+    display: none;
+}
+
+.spin2 p:first-of-type {
+    height:100px; width:92px;
+    background-image:url("http://i.imgur.com/iBIGDCY.png"); background-repeat:no-repeat;
+    animation:snowflake 5s linear 0s infinite normal;
+    -webkit-animation:snowflake 5s linear 0s infinite normal;
 }
 
 .heavy .channel-emote {
@@ -1222,6 +1243,16 @@ video.channel-emote {
   100% {
     background-position: 500px 1000px, 400px 400px, 300px 300px;
   }
+}
+@keyframes snowflake {
+    0% { transform:rotate(0grad) rotateY(0grad) rotateX(0grad); }
+    50% { transform:rotate(200grad) rotateY(200grad) rotateX(200grad); }
+    100% { transform:rotate(400grad) rotateY(400grad) rotateX(400grad); }
+}
+@-webkit-keyframes snowflake {
+    0% { -webkit-transform:rotate(0grad) rotateY(0grad) rotateX(0grad); }
+    50% { -webkit-transform:rotate(200grad) rotateY(200grad) rotateX(200grad); }
+    100% { -webkit-transform:rotate(400grad) rotateY(400grad) rotateX(400grad); }
 }
 
 @media(max-width: 1366px) {
