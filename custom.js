@@ -980,30 +980,12 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         var username = msg.msg.substr((escape+"i"+escape).length, msg.msg.indexOf(":") - (escape+"i"+escape).length);
         username = $("<p>").html(username).text();
 		    
-        var ignoreList = $("#ircNames option");
-        var match = false;
-        $.each(ignoreList, function(key, obj) {
-          if (obj.value.toLowerCase() == username.toLowerCase()) {
-            match = true;
-            return;
-          }
-        });
-        
-        if (match) {
-          return {
-            username: username,
-            msg: msg.msg.substr(msg.msg.indexOf(":") + 2),
-            meta: { addClass: "ignore ghost", addClassToNameAndTimestamp: "ignore ghost" },
-            time: msg.time
-          };
-        } else {
-          return {
-            username: username,
-            msg: msg.msg.substr(msg.msg.indexOf(":") + 2),
-            meta: { addClass: "ghost", addClassToNameAndTimestamp: "ghost" },
-            time: msg.time
-          };
-        }
+        return {
+-          username: username,
+-          msg: msg.msg.substr(msg.msg.indexOf(":") + 2),
+-          meta: { addClass: "ghost", addClassToNameAndTimestamp: "ghost" },
+-          time: msg.time
+-        };
       } else {
         return msg;
       }
@@ -1302,9 +1284,10 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     $("#irc_user_add").click(function() {
       var nick = $("#ircUser").val();
       $("#ircNames").append("<option value='"+nick+"'>"+nick+"</option>");
+      IGNORED.push(nick);
       
       var msgs = $("#messagebuffer div").filter(function() {
-        return $(this).attr('class').toLowerCase().indexOf('chat-msg-'+nick.toLowerCase()) > -1;
+        return $(this).attr('class').toLowerCase().indexOf('chat-msg-'+nick) > -1;
       });
       $(msgs).css("display", "none");
     });
@@ -1313,11 +1296,12 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
       var nicks = $("#ircNames option:selected");
       nicks.each(function(index, obj) {
         var msgs = $("#messagebuffer div").filter(function() {
-          return $(this).attr('class').toLowerCase().indexOf('chat-msg-'+obj.value.toLowerCase()) > -1;
+          return $(this).attr('class').toLowerCase().indexOf('chat-msg-'+obj.value) > -1;
         });
         
-        $(msgs).css("display", "");
-        $(msgs).children().removeClass("ignore");
+	$(msgs).css("display", "");
+	var removeIndex = IGNORED.indexOf(obj.value);
+	IGNORED.splice(removeIndex, 1);
       });
       
       $("#ircNames option:selected").remove()
@@ -1325,7 +1309,7 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     
     var IGNOREIRC = new IgnoreIRC;
     
-    add_button("ignore_irc", "IRC Ignore List", function () {
+    add_button("ignore_irc", "Ignore List", function () {
       IGNOREIRC.show();
       return false;
     });
