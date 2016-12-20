@@ -387,6 +387,10 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     });
     CUSTOM.hidden = true;
   }
+  
+  var unhidePlayer = function () {
+      // Dummy function right now
+  }
 
   var unhideVideo = function () {
     logfn();
