@@ -1,0 +1,376 @@
+html::after {
+    background-image: url(https://www.google.de/images/holiday/x_centerrighttree_desktop2x.png),url(https://www.google.de/images/holiday/x_fronttreenosnow_desktop2x.png),url(https://www.google.de/images/holiday/x_lefttree_desktop2x.png),url(https://www.google.de/images/holiday/x_righthills_desktop2x.png);
+    background-position: 340px 62px,425px 90px,120px 72px,44px 24px;
+    background-repeat: no-repeat;
+    background-size: 124px 130px,201px 187px,124px 130px,645px 236px;
+    content: '';
+    height: 247px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 645px;
+    z-index: -5;
+}
+html::before {
+    animation: orb 2s ease-in-out 0s infinite alternate;
+    background-color: rgba(255,255,255,.55);
+    border-radius: 50%;
+    box-shadow: 0 0 0 10px rgba(255,255,255,.20),0 0 0 20px rgba(255,255,255,.10);
+    content: '';
+    height: 22px;
+    position: absolute;
+    right: 304px;
+    top: 39px;
+    width: 22px;
+    z-index: -2;
+}
+html {
+    background-color: #b3dfdb;
+    background-image: url(https://www.google.de/images/holiday/x_lefttrees_desktop2x.png),url(https://www.google.de/images/holiday/x_lefthill_desktop2x.png),-moz-linear-gradient(top,#b2dfdb,#e6e6bc),-moz-linear-gradient(top,#f2f2f2,#b2dfdb);
+    background-position: 32px 131px,-24px 34px,left top,left 122px;
+    background-repeat: no-repeat;
+    background-size: 105px 128px,196px 186px,100% 122px,100% 113px;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+body {
+    background-color: transparent;
+}
+
+body::after {
+    background-image: url(https://www.google.de/images/holiday/x_maintree_desktop_empty2x.png);
+    background-position: 270px 23px;
+    background-repeat: no-repeat;
+    background-size: 120px 217px;
+    content: '';
+    height: 247px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 645px;
+    z-index: -3;
+
+}
+body::before {
+    animation: santa-wave 1s step-end 0s infinite alternate;
+    background: url(https://www.google.de/images/holiday/x_santawave2x.png);
+    background-size: 5556px 80px;
+    content: '';
+    height: 80px;
+    position: absolute;
+    right: 245px;
+    top: 90px;
+    width: 186px;
+    z-index: -4;
+
+}
+
+#wrap::after {
+    animation: snow 1.33s step-end 0s infinite;
+    background: url(https://www.google.de/images/holiday/x_snow_sprite.png);
+    content: '';
+    height: 180px;
+    position: absolute;
+    top: 45px;
+    transform: scale(1.5);
+    width: 100%;
+    z-index: -1;
+}
+#wrap::before {
+    animation: star 2s ease-in-out 0s infinite alternate;
+    background-image: url(https://www.google.de/images/holiday/x_starnoglow2x.png);
+    background-size: 58px 66px;
+    content: '';
+    height: 66px;
+    position: absolute;
+    right: 286px;
+    top: 20px;
+    width: 58px;
+    z-index: -1;
+}
+
+@keyframes orb {from{opacity:0.9;transform:scale(1)}to{opacity:1;transform:scale(1.1)}}
+
+@keyframes santa-wave {0%{background-position:-0px 0px}3.333333%{background-position:-184px 0px}6.666667%{background-position:-368px 0px}10%{background-position:-552px 0px}13.333333%{background-position:-736px 0px}16.666667%{background-position:-920px 0px}20%{background-position:-1104px 0px}23.333333%{background-position:-1288px 0px}26.666667%{background-position:-1472px 0px}30%{background-position:-1656px 0px}33.333333%{background-position:-1840px 0px}36.666667%{background-position:-2024px 0px}40%{background-position:-2208px 0px}43.333333%{background-position:-2392px 0px}46.666667%{background-position:-2576px 0px}50%{background-position:-2760px 0px}53.333333%{background-position:-2944px 0px}56.666667%{background-position:-3128px 0px}60%{background-position:-3312px 0px}63.333333%{background-position:-3496px 0px}66.666667%{background-position:-3680px 0px}70%{background-position:-3864px 0px}73.333333%{background-position:-4048px 0px}76.666667%{background-position:-4232px 0px}80%{background-position:-4416px 0px}83.333333%{background-position:-4600px 0px}86.666667%{background-position:-4784px 0px}90%{background-position:-4968px 0px}93.333333%{background-position:-5152px 0px}96.666667%{background-position:-5336px 0px}100%{background-position:-5520px 0px}}
+
+@keyframes snow {0%{background-position:-0px 0px}2.5%{background-position:-90px 0px}5%{background-position:-180px 0px}7.5%{background-position:-270px 0px}10%{background-position:-360px 0px}12.5%{background-position:-450px 0px}15%{background-position:-540px 0px}17.5%{background-position:-630px 0px}20%{background-position:-720px 0px}22.5%{background-position:-810px 0px}25%{background-position:-900px 0px}27.5%{background-position:-990px 0px}30%{background-position:-1080px 0px}32.5%{background-position:-1170px 0px}35%{background-position:-1260px 0px}37.5%{background-position:-1350px 0px}40%{background-position:-1440px 0px}42.5%{background-position:-1530px 0px}45%{background-position:-1620px 0px}47.5%{background-position:-1710px 0px}50%{background-position:-1800px 0px}52.5%{background-position:-1890px 0px}55%{background-position:-1980px 0px}57.5%{background-position:-2070px 0px}60%{background-position:-2160px 0px}62.5%{background-position:-2250px 0px}65%{background-position:-2340px 0px}67.5%{background-position:-2430px 0px}70%{background-position:-2520px 0px}72.5%{background-position:-2610px 0px}75%{background-position:-2700px 0px}77.5%{background-position:-2790px 0px}80%{background-position:-2880px 0px}82.5%{background-position:-2970px 0px}85%{background-position:-3060px 0px}87.5%{background-position:-3150px 0px}90%{background-position:-3240px 0px}92.5%{background-position:-3330px 0px}95%{background-position:-3420px 0px}97.5%{background-position:-3510px 0px}100%{background-position:-3600px 0px}}
+
+@keyframes star {0%{transform:scale(1)}80%{transform:scale(1)}100%{transform:scale(1.1)}}@keyframes orb {
+    from {
+        opacity: 0.9;
+        transform: scale(1)
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.1)
+    }
+}
+@keyframes santa-wave {
+    0% {
+        background-position: -0px 0px
+    }
+    3.333333% {
+        background-position: -184px 0px
+    }
+    6.666667% {
+        background-position: -368px 0px
+    }
+    10% {
+        background-position: -552px 0px
+    }
+    13.333333% {
+        background-position: -736px 0px
+    }
+    16.666667% {
+        background-position: -920px 0px
+    }
+    20% {
+        background-position: -1104px 0px
+    }
+    23.333333% {
+        background-position: -1288px 0px
+    }
+    26.666667% {
+        background-position: -1472px 0px
+    }
+    30% {
+        background-position: -1656px 0px
+    }
+    33.333333% {
+        background-position: -1840px 0px
+    }
+    36.666667% {
+        background-position: -2024px 0px
+    }
+    40% {
+        background-position: -2208px 0px
+    }
+    43.333333% {
+        background-position: -2392px 0px
+    }
+    46.666667% {
+        background-position: -2576px 0px
+    }
+    50% {
+        background-position: -2760px 0px
+    }
+    53.333333% {
+        background-position: -2944px 0px
+    }
+    56.666667% {
+        background-position: -3128px 0px
+    }
+    60% {
+        background-position: -3312px 0px
+    }
+    63.333333% {
+        background-position: -3496px 0px
+    }
+    66.666667% {
+        background-position: -3680px 0px
+    }
+    70% {
+        background-position: -3864px 0px
+    }
+    73.333333% {
+        background-position: -4048px 0px
+    }
+    76.666667% {
+        background-position: -4232px 0px
+    }
+    80% {
+        background-position: -4416px 0px
+    }
+    83.333333% {
+        background-position: -4600px 0px
+    }
+    86.666667% {
+        background-position: -4784px 0px
+    }
+    90% {
+        background-position: -4968px 0px
+    }
+    93.333333% {
+        background-position: -5152px 0px
+    }
+    96.666667% {
+        background-position: -5336px 0px
+    }
+    100% {
+        background-position: -5520px 0px
+    }
+}
+@keyframes snow {
+    0% {
+        background-position: -0px 0px
+    }
+    2.5% {
+        background-position: -90px 0px
+    }
+    5% {
+        background-position: -180px 0px
+    }
+    7.5% {
+        background-position: -270px 0px
+    }
+    10% {
+        background-position: -360px 0px
+    }
+    12.5% {
+        background-position: -450px 0px
+    }
+    15% {
+        background-position: -540px 0px
+    }
+    17.5% {
+        background-position: -630px 0px
+    }
+    20% {
+        background-position: -720px 0px
+    }
+    22.5% {
+        background-position: -810px 0px
+    }
+    25% {
+        background-position: -900px 0px
+    }
+    27.5% {
+        background-position: -990px 0px
+    }
+    30% {
+        background-position: -1080px 0px
+    }
+    32.5% {
+        background-position: -1170px 0px
+    }
+    35% {
+        background-position: -1260px 0px
+    }
+    37.5% {
+        background-position: -1350px 0px
+    }
+    40% {
+        background-position: -1440px 0px
+    }
+    42.5% {
+        background-position: -1530px 0px
+    }
+    45% {
+        background-position: -1620px 0px
+    }
+    47.5% {
+        background-position: -1710px 0px
+    }
+    50% {
+        background-position: -1800px 0px
+    }
+    52.5% {
+        background-position: -1890px 0px
+    }
+    55% {
+        background-position: -1980px 0px
+    }
+    57.5% {
+        background-position: -2070px 0px
+    }
+    60% {
+        background-position: -2160px 0px
+    }
+    62.5% {
+        background-position: -2250px 0px
+    }
+    65% {
+        background-position: -2340px 0px
+    }
+    67.5% {
+        background-position: -2430px 0px
+    }
+    70% {
+        background-position: -2520px 0px
+    }
+    72.5% {
+        background-position: -2610px 0px
+    }
+    75% {
+        background-position: -2700px 0px
+    }
+    77.5% {
+        background-position: -2790px 0px
+    }
+    80% {
+        background-position: -2880px 0px
+    }
+    82.5% {
+        background-position: -2970px 0px
+    }
+    85% {
+        background-position: -3060px 0px
+    }
+    87.5% {
+        background-position: -3150px 0px
+    }
+    90% {
+        background-position: -3240px 0px
+    }
+    92.5% {
+        background-position: -3330px 0px
+    }
+    95% {
+        background-position: -3420px 0px
+    }
+    97.5% {
+        background-position: -3510px 0px
+    }
+    100% {
+        background-position: -3600px 0px
+    }
+}
+@keyframes star {
+    0% {
+        transform: scale(1)
+    }
+    80% {
+        transform: scale(1)
+    }
+    100% {
+        transform: scale(1.1)
+    }
+}
+
+#motdwrap {
+    background-color: initial;
+    border: none;
+    box-shadow: none;
+}
+
+#motd {
+    width: auto;
+    margin-right: 400px;
+    margin-left: 50px;
+    overflow: hidden;
+}
+
+#motd .container {
+    width: 100%;
+}
+
+nav * {
+    border: none !important;
+    color: #fff !important;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+}
+
+nav {
+    background: initial !important;
+    border: none !important;
+    color: #fff !important;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==) !important;
+    background-repeat: repeat-x;
+    background-size: 1px 200% !important;
+}
+
+nav a:hover, nav a:focus {
+    back
+}
