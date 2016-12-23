@@ -378,7 +378,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   var hideVideo = function () {
     logfn();
     
-    hidePlayer();
     $('#chatwrap').removeClass('col-lg-5 col-md-5').addClass('col-md-12');
     $('#videowrap').hide();
     PLAYER.getVolume(function (vol) {
@@ -387,17 +386,12 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     });
     CUSTOM.hidden = true;
   }
-  
-  var unhidePlayer = function () {
-      // Dummy function right now
-  }
 
   var unhideVideo = function () {
     logfn();
     
     $('#videowrap').show();
     $('#chatwrap').addClass('col-lg-5 col-md-5').removeClass('col-md-12');
-    unhidePlayer();
     PLAYER.setVolume(CUSTOM.volume);
     CUSTOM.hidden = false;
   }
@@ -1210,27 +1204,15 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     });
   };
 
-  var init_hidePlayer = function () {
-    logfn();
-    
-    Callbacks.hidePlayer = hidePlayer;
-    hidePlayer = function () {
-      if (get_option("hidetwitchplayerinmenu") && CUSTOM.media_type === "tw")
-        Callbacks.hidePlayer
-    }
-  }
-
   var init_capturelist = function () {
     logfn();
     
     var CaptureList = function () {
       this.modal = $('#capturelist'),
-      this.modal.on('hidden.bs.modal', unhidePlayer),
       this.msglist = document.querySelector('#capturelist #msglist'),
       this.messages = []
     };
     CaptureList.prototype.show = function () {
-      hidePlayer();
       this.load();
       this.modal.modal();
     },
@@ -1560,11 +1542,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     
     var Schedule = function () {
       this.modal = $('#schedulelist'),
-      this.modal.on('hidden.bs.modal', unhidePlayer),
       this.table = document.querySelector('#schedulelist tbody')
     };
     Schedule.prototype.show = function () {
-      hidePlayer();
       this.load();
       this.modal.modal();
       runEveryMinute(function (timer) {
@@ -1610,11 +1590,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     
     var RuleList = function () {
       this.modal = $('#rulelist'),
-      this.modal.on('hidden.bs.modal', unhidePlayer),
       this.ruletable = document.querySelector('#ruletable tbody')
     };
     RuleList.prototype.show = function () {
-      hidePlayer();
       this.load();
       this.modal.modal();
     },
@@ -1637,11 +1615,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
     
     var Settings = function () {
       this.modal = $('#customsettings');
-      this.modal.on('hidden.bs.modal', unhidePlayer);
       this.table = $('#customsettings tbody');
     };
     Settings.prototype.show = function () {
-      hidePlayer();
       this.load();
       this.modal.modal();
     },
@@ -2265,7 +2241,6 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   var init_once = function () {
     logfn();
     
-    init_hidePlayer();
     init_overloads();
     init();
     loadExternal();
