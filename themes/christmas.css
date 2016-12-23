@@ -339,7 +339,7 @@ body::before {
 }
 
 #motdwrap {
-    background-color: initial;
+    background: initial;
     border: none;
     box-shadow: none;
 }
@@ -361,7 +361,7 @@ nav * {
     text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
 }
 
-nav {
+nav.navbar {
     background: initial !important;
     border: none !important;
     color: #fff !important;
@@ -371,6 +371,8 @@ nav {
     background-size: 1px 200% !important;
 }
 
-nav a:hover, nav a:focus {
-    back
+/*
+#chatwrap > *, #currenttitle, #plmeta {
+  background: rgba(0,0,0,0.6);
 }
+*/
