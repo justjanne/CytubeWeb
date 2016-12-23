@@ -2265,13 +2265,13 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
   var init_once = function () {
     logfn();
     
+    init_hidePlayer();
     init_overloads();
     init();
     loadExternal();
     process_msgbuffer();
     init_callbacks();
     init_timeDisplay();
-    init_hidePlayer();
     init_better_player();
     init_better_scroll();
     init_nice_navbar();
