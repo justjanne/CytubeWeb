@@ -832,9 +832,9 @@ if (typeof (CUSTOM) === "undefined") CUSTOM = {
         '<a href="$1$2" target="_blank"><span class="emote-fallback">$1$2</span><video src="$1$2" class="channel-emote" autoplay muted loop webkit-playsinline/></a>');
         
       msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!!\<\/a\>/ig,
-        '<a href="$1.webm" target="_blank"><span class="emote-fallback">$1.webm</span><video src="$1.webm" class="channel-user-emote" autoplay muted loop webkit-playsinline/></a>');
+        '<a href="$1.webm" target="_blank"><span class="emote-fallback">$1.webm</span><video class="channel-user-emote" autoplay muted loop webkit-playsinline><source src="$1.webm"><source src="$1.mp4"/></video></a>');
       msg = msg.replace(/\<a href=\"(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/(?:[^:\/\[\]\s]+|\[[0-9a-f:]+\])(?::\d+)?(?:\/[^\/\s]*)*)(\.gifv)!\<\/a\>/ig,
-        '<a href="$1.webm" target="_blank"><span class="emote-fallback">$1.webm</span><video src="$1.webm" class="channel-emote" autoplay muted loop webkit-playsinline/></a>');
+        '<a href="$1.webm" target="_blank"><span class="emote-fallback">$1.webm</span><video class="channel-emote" autoplay muted loop webkit-playsinline><source src="$1.webm"><source src="$1.mp4"></video></a>');
         
       msg = msg.replace(/\<a href=\"(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\" target=\"_blank\" rel=\"noopener noreferrer\"\>(\w+:\/\/gfycat\.com)((?::\d+)?(?:\/[^\/\s]*)*)!!\<\/a\>/ig,
         '<a href="https://gfycat.com$2" target="_blank"><span class="emote-fallback">https://gfycat.com$2</span><video class="channel-user-emote" autoplay loop muted webkit-playsinline><source src="https://zippy.gfycat.com$2.webm"><source src="https://fat.gfycat.com$2.webm"><source src="https://giant.gfycat.com$2.webm"></video></a>');
