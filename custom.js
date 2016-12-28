@@ -335,21 +335,11 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
         return this.indexOf(text) !== -1;
       }
     }
-
-    if ('function' != typeof escape_html) {
-      escape_html = function (str) {
-        return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      }
-    }
-
-    if ('function' != typeof check_for_unsecure_content) {
-      check_for_unsecure_content = function (str) {
-        if (str.contains("http://")) {
-          console.err("Warning: Message might contain insecure content: " + str);
-        }
-      }
-    }
   };
+  
+  var escape_html = function (str) {
+    return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
 
   var hideVideo = function () {
     logfn();
@@ -445,7 +435,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
           div.attr("data-" + key, url);
         });
       }
-      result[0].innerHTML = check_for_unsecure_content(data.msg);
+      result[0].innerHTML = data.msg;
       if (data.meta.action) {
         name.html("");
         result[0].innerHTML = data.username + " " + data.msg;
