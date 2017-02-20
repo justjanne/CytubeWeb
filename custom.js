@@ -1667,7 +1667,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
             render_difftime(event.time) + '</td></tr>';
         } else {
           return '<tr><td class="vertical-middle"><a href="' + event.link + '">' +
-            escape_html(event.title + '</a></td><td class="vertical-middle">' + (event.region || "")) +
+            escape_html(event.title) + '</a></td><td class="vertical-middle">' + escape_html(event.region || "") +
             '</td><td class="text-left vertical-middle">' + render_nicetime(event.time) +
             '</td><td class="text-left vertical-middle">' + render_difftime(event.time) + '</td></tr>';
         }
