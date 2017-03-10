@@ -38,12 +38,9 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   }
 
   if ("#debug" === window.location.hash) {
-    path = "https://localhost.kuschku.de/";
     CUSTOM.debug = true;
-  } else if ("#old" === window.location.hash) {
-    path = "https://cdn.kuschku.de/"
   } else {
-    path = "https://cdn.kuschku.de/beta/"
+    path = "https://static.kuschku.de/stream/"
   }
 
   var logfn = function () {
