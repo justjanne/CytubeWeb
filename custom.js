@@ -1316,7 +1316,6 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
         if (get_option("notification")) {
           var message = process_msg(data);
           var notification = new Notification(message.username + ": " + message.msg);
-          notification.show();
         }
       }
     });
