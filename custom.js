@@ -49,7 +49,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   };
 
   var Options = {
-    "notifications": {
+    "notification": {
       "displayname": "Display Desktop Notifications",
       "type": "toggle",
       "names": ["", ""],
