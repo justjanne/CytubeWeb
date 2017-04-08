@@ -1317,7 +1317,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
           var message = process_msg(data);
           message.msg = execEmotes(message.msg);
           message.msg = message.msg.replace(/<span class="emote-fallback">.*<\/span>/g, "");
-          var notification = new Notification(message.username + ": " + message.msg);
+          var notification = new Notification(CHANNEL.name + "– Cytu.be", {body: message.username + ": " + message.msg});
         }
       }
     });
