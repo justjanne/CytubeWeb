@@ -1744,14 +1744,13 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
         var elem = $('<div/>');
         var toggle = $('<input type="checkbox"/>');
         toggle.attr("id", "custom-setting-" + name);
-        toggle.change(function () {
-          var enabled = $(this).prop("checked");
-          set_option(name, enabled);
-        });
-
-        toggle[0].checked = get_option(name);
         if (data.handler)
           toggle.change(data.handler);
+        else
+          toggle.change(function () {
+            var enabled = $(this).prop("checked");
+            set_option(name, enabled);
+          });
 
         toggle.appendTo(elem);
         return elem;
@@ -2428,6 +2427,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     Options.notification.handler = request_notification;
 
     if (Notification.permission !== "granted") {
+      set_option("notification", false);
+
       if ($("#custom-setting-notification"))
         $("#custom-setting-notification")[ 0 ].checked = false;
 
