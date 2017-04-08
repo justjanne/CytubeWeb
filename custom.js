@@ -288,7 +288,6 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     if (!CustomOptions.hasOwnProperty(name) && Options.hasOwnProperty(name)) {
       set_option(name, Options[name].default);
       console.log("Initializing option " + name + " with default value " + Options[name].default);
-      console.trace();
     }
     return CustomOptions[name];
   };
@@ -2428,18 +2427,18 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   var request_notification = function () {
     Options.notification.handler = request_notification;
 
-    if (Notification.permission !== "granted")
-      $("#custom-setting-notification")[0].checked = false;
+    if (Notification.permission !== "granted") {
+      if ($("#custom-setting-notification"))
+        $("#custom-setting-notification")[ 0 ].checked = false;
 
-    Notification.requestPermission(function (result) {
-      if (result === "granted") {
-        set_option("notification", true);
-        $("#custom-setting-notification")[0].checked = true;
-      } else {
-        set_option("notification", false);
-        $("#custom-setting-notification")[0].checked = false;
-      }
-    });
+      Notification.requestPermission(function (result) {
+        if (result === "granted") {
+          set_option("notification", true);
+          if (if ($("#custom-setting-notification")))
+            $("#custom-setting-notification")[ 0 ].checked = true;
+        }
+      });
+    }
   };
 
   var init_once = function () {
@@ -2456,7 +2455,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     init_nice_navbar();
     init_colorpicker();
 
-    request_notification();
+    if (!CustomOptions.hasOwnProperty("notification"))
+      request_notification();
 
     CUSTOM.init_done = true;
   };
