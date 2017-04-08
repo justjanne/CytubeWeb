@@ -2442,6 +2442,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
             $("#custom-setting-notification")[ 0 ].checked = true;
         }
       });
+    } else if (val) {
+      set_option("notification", checked);
     }
   };
 
