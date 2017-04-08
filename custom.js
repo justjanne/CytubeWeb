@@ -49,6 +49,14 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   };
 
   var Options = {
+    "notifications": {
+      "displayname": "Display Desktop Notifications",
+      "type": "toggle",
+      "names": ["", ""],
+      "values": [false, true],
+      "default": false,
+      "handler": null
+    },
     "newchat": {
       "displayname": "New Chat Layout (beta)",
       "type": "toggle",
@@ -1305,6 +1313,10 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     registerHandler("chatMsg", function (data) {
       if (match_highlight(CLIENT.name, data)) {
         CAPTURELIST.messages.push(data);
+        if (get_option("notification")) {
+          var notification = new Notification(JSON.stringify(data));
+          notification.show();
+        }
       }
     });
 
@@ -1737,6 +1749,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
         });
 
         toggle[0].checked = get_option(name);
+        if (data.handler)
+          toggle.change(data.handler);
 
         toggle.appendTo(elem);
         return elem;
@@ -1767,6 +1781,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
             return render_toggle(name, data);
           case "selector":
             return render_selector(name, data);
+          case "button":
+            return render_button(name, data);
           case "none":
             return null;
           default:
@@ -2407,6 +2423,18 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     update_index(7);
   };
 
+  var request_notification = function () {
+    Options.notifications.handler = request_notification;
+
+    Notification.requestPermission(function (result) {
+      if (result === "granted") {
+        set_option("notification", true);
+      } else {
+        set_option("notification", false);
+      }
+    });
+  };
+
   var init_once = function () {
     logfn();
 
@@ -2420,6 +2448,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     init_better_scroll();
     init_nice_navbar();
     init_colorpicker();
+
+    request_notification();
 
     CUSTOM.init_done = true;
   };
