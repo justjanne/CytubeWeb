@@ -1314,7 +1314,9 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       if (match_highlight(CLIENT.name, data)) {
         CAPTURELIST.messages.push(data);
         if (get_option("notification")) {
-          var notification = new Notification(JSON.stringify(data));
+          var message = process_msg(data);
+          var notification = new Notification(message.sender + ": " + message.content);
+          console.log(message);
           notification.show();
         }
       }
