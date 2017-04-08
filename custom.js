@@ -2433,13 +2433,13 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     if (Notification.permission !== "granted") {
       set_option("notification", false);
 
-      if ($("#custom-setting-notification"))
+      if ($("#custom-setting-notification").length)
         $("#custom-setting-notification")[ 0 ].checked = false;
 
       if (checked) Notification.requestPermission(function (result) {
         if (result === "granted") {
           set_option("notification", true);
-          if ($("#custom-setting-notification"))
+          if ($("#custom-setting-notification").length)
             $("#custom-setting-notification")[ 0 ].checked = true;
         }
       });
