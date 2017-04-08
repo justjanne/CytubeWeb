@@ -1544,7 +1544,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
                 t = t.substring(3)
               }
               if (CUSTOM.chatcolor) {
-                t = "ssc:" + CUSTOM.chatcolor + t;
+                t = "ssc:" + CUSTOM.chatcolor + " " + t;
               }
               socket.emit('chatMsg', {
                 msg: t, meta: a
