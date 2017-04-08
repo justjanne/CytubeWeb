@@ -1311,13 +1311,14 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
     registerHandler("chatMsg", function (data) {
       var message = process_msg(data);
-      message.msg = execEmotes(message.msg);
-      message.msg = message.msg.replace(/<span class="emote-fallback">.*<\/span>/g, "");
+      var el = document.createElement("p");
+      el.innerHTML = message.msg;
+      message.msg = el.textContent;
 
       if (match_highlight(CLIENT.name, message)) {
         CAPTURELIST.messages.push(data);
         if (!data.backlog && get_option("notification")) {
-          var notification = new Notification(CHANNEL.name + " – Cytu.be", {body: message.username + ": " + message.msg});
+          var notification = new Notification(CHANNEL.name + " – cytu.be", {body: message.username + ": " + message.msg});
         }
       }
     });
