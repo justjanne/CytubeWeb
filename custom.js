@@ -2426,7 +2426,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   };
 
   var request_notification = function () {
-    Options.notifications.handler = request_notification;
+    Options.notification.handler = request_notification;
 
     Notification.requestPermission(function (result) {
       if (result === "granted") {
