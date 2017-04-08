@@ -1312,7 +1312,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     registerHandler("chatMsg", function (data) {
       if (match_highlight(CLIENT.name, data)) {
         CAPTURELIST.messages.push(data);
-        if (get_option("notification") && !data.backlog) {
+        if (!data.backlog && get_option("notification")) {
           var message = process_msg(data);
           message.msg = execEmotes(message.msg);
           message.msg = message.msg.replace(/<span class="emote-fallback">.*<\/span>/g, "");
