@@ -2431,10 +2431,10 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     Notification.requestPermission(function (result) {
       if (result === "granted") {
         set_option("notification", true);
-        $("#custom-toggle-notification")[0].checked = true;
+        $("#custom-setting-notification")[0].checked = true;
       } else {
         set_option("notification", false);
-        $("#custom-toggle-notification")[0].checked = false;
+        $("#custom-setting-notification")[0].checked = false;
       }
     });
   };
