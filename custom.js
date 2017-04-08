@@ -2428,6 +2428,9 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   var request_notification = function () {
     Options.notification.handler = request_notification;
 
+    if (Notification.permission !== "granted")
+      $("#custom-setting-notification")[0].checked = false;
+
     Notification.requestPermission(function (result) {
       if (result === "granted") {
         set_option("notification", true);
