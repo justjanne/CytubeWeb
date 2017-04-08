@@ -54,7 +54,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       "type": "toggle",
       "names": ["", ""],
       "values": [false, true],
-      "default": false,
+      "default": null,
       "handler": null
     },
     "newchat": {
@@ -2448,7 +2448,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   var init_request_notification = function () {
     Options.notification.handler = request_notification;
 
-    if (!CustomOptions.hasOwnProperty("notification"))
+    if (get_option("notification") === null)
       request_notification();
 
     if (Notification.permission !== "granted") {
