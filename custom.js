@@ -1310,12 +1310,13 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     var CAPTURELIST = new CaptureList;
 
     registerHandler("chatMsg", function (data) {
-      if (match_highlight(CLIENT.name, data)) {
+      var message = process_msg(data);
+      message.msg = execEmotes(message.msg);
+      message.msg = message.msg.replace(/<span class="emote-fallback">.*<\/span>/g, "");
+
+      if (match_highlight(CLIENT.name, message)) {
         CAPTURELIST.messages.push(data);
         if (!data.backlog && get_option("notification")) {
-          var message = process_msg(data);
-          message.msg = execEmotes(message.msg);
-          message.msg = message.msg.replace(/<span class="emote-fallback">.*<\/span>/g, "");
           var notification = new Notification(CHANNEL.name + "– Cytu.be", {body: message.username + ": " + message.msg});
         }
       }
