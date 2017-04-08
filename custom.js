@@ -1181,7 +1181,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
           addClass: $(obj.children().last()).attr("class"),
           addClassToNameAndTimestamp: $(obj.children()[0]).attr("class").indexOf($(obj.children()[2]).attr("class")) !==
           -1
-        }, time: time.getTime()
+        }, time: time.getTime(), backlog: true
       }
     };
     var lastmsg = { name: "" };
@@ -1313,7 +1313,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     registerHandler("chatMsg", function (data) {
       if (match_highlight(CLIENT.name, data)) {
         CAPTURELIST.messages.push(data);
-        if (get_option("notification")) {
+        if (get_option("notification") && !data.backlog) {
           var message = process_msg(data);
           message.msg = execEmotes(message.msg);
           message.msg = message.msg.replace(/<span class="emote-fallback">.*<\/span>/g, "");
