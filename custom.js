@@ -1315,6 +1315,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
         CAPTURELIST.messages.push(data);
         if (get_option("notification")) {
           var message = process_msg(data);
+          message.msg = execEmotes(message.msg);
+          message.msg = message.msg.replace(/<span class="emote-fallback">.*<\/span>/g, "");
           var notification = new Notification(message.username + ": " + message.msg);
         }
       }
