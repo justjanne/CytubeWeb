@@ -1317,7 +1317,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
       if (match_highlight(CLIENT.name, message)) {
         CAPTURELIST.messages.push(data);
-        if (!data.backlog && get_option("notification")) {
+        if (!data.backlog && get_option("notification") && document['hidden']) {
           var notification = new Notification(CHANNEL.name + " – cytu.be", {body: message.username + ": " + message.msg});
         }
       }
