@@ -2434,7 +2434,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       Notification.requestPermission(function (result) {
         if (result === "granted") {
           set_option("notification", true);
-          if (if ($("#custom-setting-notification")))
+          if ($("#custom-setting-notification")))
             $("#custom-setting-notification")[ 0 ].checked = true;
         }
       });
