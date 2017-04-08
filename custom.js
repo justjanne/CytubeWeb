@@ -2426,14 +2426,15 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     update_index(7);
   };
 
-  var request_notification = function () {
+  var request_notification = function (val) {
+    var checked = val.originalEvent.target.checked;
     if (Notification.permission !== "granted") {
       set_option("notification", false);
 
       if ($("#custom-setting-notification"))
         $("#custom-setting-notification")[ 0 ].checked = false;
 
-      Notification.requestPermission(function (result) {
+      if (checked) Notification.requestPermission(function (result) {
         if (result === "granted") {
           set_option("notification", true);
           if ($("#custom-setting-notification"))
@@ -2448,6 +2449,10 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
     if (!CustomOptions.hasOwnProperty("notification"))
       request_notification();
+
+    if (Notification.permission !== "granted") {
+      set_option("notification", false);
+    }
   };
 
   var init_once = function () {
