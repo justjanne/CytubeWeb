@@ -1752,6 +1752,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
             set_option(name, enabled);
           });
 
+        toggle[0].checked = get_option(name);
+
         toggle.appendTo(elem);
         return elem;
       };
@@ -2420,12 +2422,11 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     init_capturelist();
     init_chatsizer();
     init_clock();
+    init_request_notification();
     update_index(7);
   };
 
   var request_notification = function () {
-    Options.notification.handler = request_notification;
-
     if (Notification.permission !== "granted") {
       set_option("notification", false);
 
@@ -2442,6 +2443,13 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     }
   };
 
+  var init_request_notification = function () {
+    Options.notification.handler = request_notification;
+
+    if (!CustomOptions.hasOwnProperty("notification"))
+      request_notification();
+  };
+
   var init_once = function () {
     logfn();
 
@@ -2455,9 +2463,6 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     init_better_scroll();
     init_nice_navbar();
     init_colorpicker();
-
-    if (!CustomOptions.hasOwnProperty("notification"))
-      request_notification();
 
     CUSTOM.init_done = true;
   };
