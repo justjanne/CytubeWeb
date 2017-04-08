@@ -2429,7 +2429,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   };
 
   var request_notification = function (val) {
-    var checked = val.originalEvent.target.checked;
+    var checked = val && val.originalEvent.target.checked;
     if (Notification.permission !== "granted") {
       set_option("notification", false);
 
