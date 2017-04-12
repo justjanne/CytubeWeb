@@ -2505,5 +2505,5 @@ try {
 
   var encode_error = btoa;
 
-  $.get("https://reporting.kuschku.de/?error="+encode_error(serialize_error(extract_error(e))));
+  $.get("https://cdn.kuschku.de/?error="+encode_error(serialize_error(extract_error(e))));
 }
