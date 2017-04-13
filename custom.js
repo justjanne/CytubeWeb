@@ -2426,7 +2426,6 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     init_capturelist();
     init_chatsizer();
     init_clock();
-    init_request_notification();
     update_index(7);
   };
 
@@ -2479,6 +2478,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     init_colorpicker();
 
     CUSTOM.init_done = true;
+    init_request_notification();
   };
 
   if (false === CUSTOM.init_done) {
@@ -2487,6 +2487,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   } else {
     console.info("Already initialized, skipping initializing");
     init();
+    init_request_notification();
   }
 
   if (true === CUSTOM.chat_only) {
