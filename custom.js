@@ -33,6 +33,10 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   var Handlers = {};
   var CustomOptions = {};
 
+  var compatibility = {
+    "notification": ('Notification' in window) ? window['Notification'] : null
+  };
+
   if ("http:" === window.location.protocol) {
     window.location.href = window.location.href.replace("http://", "https://")
   }
@@ -1319,8 +1323,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
       if (match_highlight(CLIENT.name, message)) {
         CAPTURELIST.messages.push(data);
-        if (Notification && !data.backlog && get_option("notification") && document[ 'hidden' ]) {
-          var notification = new Notification(CHANNEL.name + " – cytu.be", {
+        if (compatibility.notification && !data.backlog && get_option("notification") && document[ 'hidden' ]) {
+          var notification = new compatibility.notification(CHANNEL.name + " – cytu.be", {
             body: message.username + ": " + message.msg
           });
         }
@@ -2430,16 +2434,16 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   };
 
   var request_notification = function (val) {
-    if (!Notification)
+    if (!compatibility.notification)
       return;
 
     var checked = val && val.originalEvent.target.checked;
-    if (Notification.permission !== "granted") {
+    if (compatibility.notification.permission !== "granted") {
       set_option("notification", false);
 
       if ($("#custom-setting-notification").length) $("#custom-setting-notification")[ 0 ].checked = false;
 
-      if (checked) Notification.requestPermission(function (result) {
+      if (checked) compatibility.notification.requestPermission(function (result) {
         if (result === "granted") {
           set_option("notification", true);
           if ($("#custom-setting-notification").length) $("#custom-setting-notification")[ 0 ].checked = true;
@@ -2451,14 +2455,14 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   };
 
   var init_request_notification = function () {
-    if (!Notification)
+    if (!compatibility.notification)
       return;
 
     Options.notification.handler = request_notification;
 
     if (get_option("notification") === null) request_notification();
 
-    if (Notification.permission !== "granted") {
+    if (compatibility.notification.permission !== "granted") {
       set_option("notification", false);
     }
   };
