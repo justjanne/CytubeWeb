@@ -1379,10 +1379,6 @@ video.channel-emote {
     font-size: 16px;
     content: "A→Z";
   }
-  
-  .modal-footer {
-    display: none;
-  }
 }
 
 @media (max-width: 420px) {
