@@ -1,4 +1,4 @@
-/* global CUSTOM */
+/* global window.CUSTOM */
 /// <reference path="typings/jquery/jquery.d.ts"/>
 /// <reference path="typings/cytube/cytube.d.ts"/>
 /// <reference path="typings/katex/katex.d.ts"/>
@@ -10,7 +10,7 @@ var global_autocomplete_last_result = "";
 var global_autocomplete_last_suffix = "";
 var global_autocomplete_last_caret = 0;
 
-if ("undefined" === typeof (CUSTOM)) CUSTOM = {
+if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
   chatcolor: null,
   init_done: false,
   chat_only: false,
@@ -42,13 +42,13 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   }
 
   if ("#debug" === window.location.hash) {
-    CUSTOM.debug = true;
+    window.CUSTOM.debug = true;
   } else {
     path = "https://static.kuschku.de/stream/"
   }
 
   var logfn = function () {
-    //if (CUSTOM.debug) console.log("%o %s",logfn.caller,
+    //if (window.CUSTOM.debug) console.log("%o %s",logfn.caller,
     // JSON.stringify(Array.prototype.slice.call(logfn.caller.arguments)));
   };
 
@@ -150,26 +150,26 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   };
 
   // Ressources
-  if (null === CUSTOM.resources) {
-    CUSTOM.resources = {
+  if (null === window.CUSTOM.resources) {
+    window.CUSTOM.resources = {
       "stars": {
-        "url": path + "data/stars.php", "callback": [], "data": null,
+        "url": path + "data/stars.php", "callback": [], "data": null
       }, "awards": {
-        "url": path + "data/awards.json", "callback": [], "data": null,
+        "url": path + "data/awards.json", "callback": [], "data": null
       }, "rules": {
-        "url": path + "data/rules.json", "callback": [], "data": null,
+        "url": path + "data/rules.json", "callback": [], "data": null
       }, "lyrics": {
-        "url": path + "data/lyrics.json", "callback": [], "data": null,
+        "url": path + "data/lyrics.json", "callback": [], "data": null
       }, "intro": {
-        "url": path + "data/intro.json", "callback": [], "data": null,
+        "url": path + "data/intro.json", "callback": [], "data": null
       }, "emotestats": {
-        "url": path + "data/emotestats.json", "callback": [], "data": {},
+        "url": path + "data/emotestats.json", "callback": [], "data": {}
       }, "ranks": {
         "url": "motd://ranks", "callback": [], "data": null
       }, "schedule": {
-        "url": "motd://schedule", "callback": [], "data": null,
+        "url": "motd://schedule", "callback": [], "data": null
       }, "permissions": {
-        "url": "motd://permissions", "callback": [], "data": null,
+        "url": "motd://permissions", "callback": [], "data": null
       }
     };
   }
@@ -245,10 +245,10 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     if (!OriginalCallbacks.hasOwnProperty(name)) {
       OriginalCallbacks[ name ] = Callbacks[ name ];
       Callbacks[ name ] = function (e) {
-        if (CUSTOM.debug) {
+        if (window.CUSTOM.debug) {
           console.debug(name);
         }
-        if (CUSTOM.debug) {
+        if (window.CUSTOM.debug) {
           console.debug(JSON.parse(JSON.stringify(e)));
         }
         func(e, OriginalCallbacks[ name ]);
@@ -346,7 +346,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
   var escape_html = function (str) {
     return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
+  };
 
   var hideVideo = function () {
     logfn();
@@ -354,10 +354,10 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     $('#chatwrap').removeClass('col-lg-5 col-md-5').addClass('col-md-12');
     $('#videowrap').hide();
     PLAYER.getVolume(function (vol) {
-      CUSTOM.volume = vol;
+      window.CUSTOM.volume = vol;
       PLAYER.setVolume(0);
     });
-    CUSTOM.hidden = true;
+    window.CUSTOM.hidden = true;
   };
 
   var unhideVideo = function () {
@@ -365,17 +365,17 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
     $('#videowrap').show();
     $('#chatwrap').addClass('col-lg-5 col-md-5').removeClass('col-md-12');
-    PLAYER.setVolume(CUSTOM.volume);
-    CUSTOM.hidden = false;
+    PLAYER.setVolume(window.CUSTOM.volume);
+    window.CUSTOM.hidden = false;
   };
 
   var apply_hidden_video = function (enabled) {
     logfn();
 
-    if (!CUSTOM.hidden && enabled) {
+    if (!window.CUSTOM.hidden && enabled) {
       hideVideo();
     } else {
-      if (CUSTOM.hidden && !enabled) {
+      if (window.CUSTOM.hidden && !enabled) {
         unhideVideo();
       }
     }
@@ -384,7 +384,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   $(window).unbind("resize");
   $(window).resize(function () {
     handleWindowResize();
-    CUSTOM.mobile = (720 >= window.innerWidth && 720 >= window.innerHeight);
+    window.CUSTOM.mobile = (720 >= window.innerWidth && 720 >= window.innerHeight);
   });
 
   formatChatMessage = function (e, t) {
@@ -519,7 +519,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     $("#btn_ruleslist").show();
     $("#btn_settings").show();
 
-    CUSTOM.shortSchedule = true;
+    window.CUSTOM.shortSchedule = true;
     renderScheduleButton();
     $("#btn_large-chat").hide();
     $("#btn_hide-video").hide();
@@ -527,7 +527,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     $("body").addClass("chatOnly");
     handleWindowResize();
 
-    CUSTOM.chat_only = true;
+    window.CUSTOM.chat_only = true;
   };
 
   var userlist_createProfile = function (elem, userdata) {
@@ -601,7 +601,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       var dropdown = elem.find(".user-dropdown");
 
       event.preventDefault();
-      if ("none" == dropdown.css("display")) {
+      if ("none" === dropdown.css("display")) {
         $(".user-dropdown").hide();
         $(document).bind("mouseup.userlist-ddown", function (t) {
           if (0 === dropdown.has(event.target).length && 0 === elem.parent().has(event.target).length) {
@@ -720,7 +720,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
     colorize_userlist_item(div);
 
-    div.toggleClass("userlist_afk", userdata.meta.hasOwnProperty("afk") && userdata.afk);
+    div.toggleClass("userlist_afk", userdata.meta.hasOwnProperty("afk") && userdata.meta.afk);
     div.toggleClass("userlist_muted", userdata.meta.hasOwnProperty("muted") && userdata.meta.muted);
     div.toggleClass("userlist_smuted", userdata.meta.hasOwnProperty("smuted") && userdata.meta.smuted);
 
@@ -729,15 +729,15 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     if (userdata.leader) {
       $("<span/>").addClass("glyphicon glyphicon-star-empty").appendTo(icons);
     }
-    if (userdata.afk) {
+    if (userdata.meta.afk) {
       name.css("font-style", "italic");
       $("<span/>").addClass("glyphicon glyphicon-time").appendTo(icons);
     }
     if (userdata.icon) {
       $("<span/>").addClass("glyphicon " + userdata.icon).prependTo(icons);
     }
-    if (CUSTOM.resources.stars.data.hasOwnProperty(userdata.name)) {
-      div.attr("data-star", CUSTOM.resources.stars.data[ userdata.name ]);
+    if (window.CUSTOM.resources.stars.data.hasOwnProperty(userdata.name)) {
+      div.attr("data-star", window.CUSTOM.resources.stars.data[ userdata.name ]);
     } else {
       div.attr("data-star", "0");
     }
@@ -799,7 +799,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   var loadData = function () {
     logfn();
 
-    $.each(CUSTOM.resources, function (key, value) {
+    $.each(window.CUSTOM.resources, function (key, value) {
       var handler;
 
       if (value.url.startsWith("motd://")) {
@@ -811,8 +811,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       }
 
       handler(value.url, function (json) {
-        CUSTOM.resources[ key ].data = json;
-        CUSTOM.resources[ key ].callback.forEach(function (f) {
+        window.CUSTOM.resources[ key ].data = json;
+        window.CUSTOM.resources[ key ].callback.forEach(function (f) {
           f();
         });
       });
@@ -828,7 +828,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       formatUserlistItem(elem);
     });
   };
-  CUSTOM.resources.stars.callback.push(renderStars);
+  window.CUSTOM.resources.stars.callback.push(renderStars);
 
   var getIntroFromName = function (name, count) {
     logfn();
@@ -844,10 +844,10 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       }
     };
     var status = getStatusFromCount(count);
-    if (name in CUSTOM.resources.intro.data && 0 < count) {
+    if (name in window.CUSTOM.resources.intro.data && 0 < count) {
       return {
         username: "\\$server\\$",
-        msg: CUSTOM.resources.intro.data[ name ],
+        msg: window.CUSTOM.resources.intro.data[ name ],
         meta: { addClass: "custom-intro" },
         data: { type: "intro" },
         time: new Date().getTime()
@@ -1064,7 +1064,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
       }
     } else {
-      if (CUSTOM.resources.ranks.data && 2 <= CUSTOM.resources.ranks.data[ data.username ]) {
+      if (window.CUSTOM.resources.ranks.data && 2 <= window.CUSTOM.resources.ranks.data[ data.username ]) {
         data.msg = embed_image(data.msg);
       }
       data = process_rainbow(data);
@@ -1109,7 +1109,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
     registerCallback("mediaUpdate", function (e, original) {
       original(e);
-      CUSTOM.media_type = e.type;
+      window.CUSTOM.media_type = e.type;
       if ('undefined' !== typeof (time_display_time)) {
         time_display_time.paused = e.paused;
         time_display_time.raw = Math.max(e.currentTime, 0);
@@ -1193,7 +1193,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     $.each($('#messagebuffer').children(), function (i, elem) {
       var msg = parse_message($(elem));
       if (msg) {
-        CUSTOM.userstats[ msg.username ] = msg.time;
+        window.CUSTOM.userstats[ msg.username ] = msg.time;
 
         var aftermsg = process_msg(msg);
         var n = formatChatMessage(aftermsg, lastmsg);
@@ -1371,7 +1371,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       var lindex = [];
       CHANNEL.emotes.forEach(function (emote) {
         lindex.push({
-          text: emote.name, probability: Number(CUSTOM.resources.emotestats.data[ emote.name ] || -1), type: "emote"
+          text: emote.name, probability: Number(window.CUSTOM.resources.emotestats.data[ emote.name ] || -1), type: "emote"
         });
       });
       return lindex;
@@ -1386,7 +1386,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       $("#userlist").children().each(function (i, v) {
         var name = $($(v).children()[ 1 ]).text();
         lindex.push({
-          text: name, probability: (name === CLIENT.name) ? -1 : Number(CUSTOM.userstats[ name ] || -1), type: "user"
+          text: name, probability: (name === CLIENT.name) ? -1 : Number(window.CUSTOM.userstats[ name ] || -1), type: "user"
         });
       });
       return lindex;
@@ -1413,15 +1413,15 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
         changed = (old !== tarsindex);
       }
       if (changed) {
-        CUSTOM.index = userindex.concat(tarsindex).concat(emoteindex);
+        window.CUSTOM.index = userindex.concat(tarsindex).concat(emoteindex);
         if (get_option("smarttabcomplete")) {
-          CUSTOM.index.sort(sort);
+          window.CUSTOM.index.sort(sort);
         }
       }
     }
   };
   var update_index = create_update_index();
-  CUSTOM.resources.emotestats.callback.push(function () {
+  window.CUSTOM.resources.emotestats.callback.push(function () {
     update_index(1);
   });
 
@@ -1470,7 +1470,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       };
 
       var findMatchingEntries = function (str) {
-        return CUSTOM.index.filter(function (elem) {
+        return window.CUSTOM.index.filter(function (elem) {
           return elem.text.toLowerCase().startsWith(str.toLowerCase()) ||
                  elem.text.toUpperCase().startsWith(str.toUpperCase());
         })
@@ -1553,8 +1553,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
                 a.modflair = CLIENT.rank;
                 t = t.substring(3)
               }
-              if (CUSTOM.chatcolor) {
-                t = "ssc:" + CUSTOM.chatcolor + " " + t;
+              if (window.CUSTOM.chatcolor) {
+                t = "ssc:" + window.CUSTOM.chatcolor + " " + t;
               }
               socket.emit('chatMsg', {
                 msg: t, meta: a
@@ -1577,7 +1577,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       }
     };
 
-    if (!CUSTOM.init_done) {
+    if (!window.CUSTOM.init_done) {
       Callbacks.initPm = initPm;
       initPm = function (nick) {
         var pre_window = find_pm_window(nick);
@@ -1680,7 +1680,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
         var event = {
           title: data[ 0 ], time: data[ 1 ], region: data[ 2 ], link: data[ 3 ] || ""
         };
-        if (CUSTOM.mobile) {
+        if (window.CUSTOM.mobile) {
           return '<tr><td class="vertical-middle"><a href="' + event.link + '">' +
                  escape_html(event.title + (event.region ? ' [' + event.region + ']' : "")) +
                  '</a></td><td class="text-left vertical-middle">' + render_nicetime(event.time) + '<br>' +
@@ -1693,13 +1693,13 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
         }
       };
 
-      if (CUSTOM.mobile) {
+      if (window.CUSTOM.mobile) {
         $(this.modal).find("thead").html("<tr><th>Event</th>><th>Time</th></tr>");
       } else {
         $(this.modal).find("thead").html("<tr><th>Event</th><th>Region</th><th>Time</th><th>Countdown</th></tr>");
       }
 
-      this.table.innerHTML = CUSTOM.resources.schedule.data.filter(is_in_future).map(render_event).reduce(function (a, b) {
+      this.table.innerHTML = window.CUSTOM.resources.schedule.data.filter(is_in_future).map(render_event).reduce(function (a, b) {
         return a + b;
       }, "");
     };
@@ -1727,7 +1727,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
                '</td><td class="text-left vertical-middle">' + escape_html(rule) + '</td></tr>';
       };
 
-      this.ruletable.innerHTML = $.map(CUSTOM.resources.rules.data, render_rule).reduce(function (a, b) {
+      this.ruletable.innerHTML = $.map(window.CUSTOM.resources.rules.data, render_rule).reduce(function (a, b) {
         return a + b;
       });
     };
@@ -1743,7 +1743,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
     var Settings = function () {
       this.modal = $('#customsettings');
-      this.table = $('#customsettings tbody');
+      this.table = this.modal.find('tbody');
     };
     Settings.prototype.show = function () {
       this.load();
@@ -1845,7 +1845,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       return 360000000 > date.getTime() - now.getTime();
     };
     var pad = function (str, num) {
-      return (Array(num + 1).join("0") + str).substr(-num, num);
+      return (new Array(num + 1).join("0") + str).substr(-num, num);
     };
     var render_direct = function (date) {
       var diff = date.getTime() - now.getTime();
@@ -1878,7 +1878,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   var renderScheduleButton = function () {
     logfn();
 
-    if ("undefined" === typeof (moment) || null === CUSTOM.resources.schedule.data) {
+    if ("undefined" === typeof (moment) || null === window.CUSTOM.resources.schedule.data) {
       return;
     }
 
@@ -1888,7 +1888,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     };
 
     var time = new Date().getTime();
-    var events = CUSTOM.resources.schedule.data.filter(function (e) {
+    var events = window.CUSTOM.resources.schedule.data.filter(function (e) {
       return time < e[ 1 ];
     });
 
@@ -1902,11 +1902,11 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       }
 
       var region = 3 === event.length ? (" [" + event[ 2 ] + "]") : "";
-      var divider = CUSTOM.shortSchedule ? "<br>" : " | ";
+      var divider = window.CUSTOM.shortSchedule ? "<br>" : " | ";
       apply(event[ 0 ] + region + divider + render_time(event[ 1 ]));
     }
   };
-  CUSTOM.resources.schedule.callback.push(renderScheduleButton);
+  window.CUSTOM.resources.schedule.callback.push(renderScheduleButton);
   externalScripts[ 1 ].callback.push(renderScheduleButton);
 
   var init_controls = function () {
@@ -2036,9 +2036,9 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     };
 
     $('#lyrics_menu').unbind().remove();
-    $('#lyricsbtn').after(render_elem(CUSTOM.resources.lyrics.data));
+    $('#lyricsbtn').after(render_elem(window.CUSTOM.resources.lyrics.data));
 
-    $('#lyrics_menu a').click(function (e) {
+    $('#lyrics_menu').find('a').click(function (e) {
       var song = $(this).attr("data-song");
       if (song && "" !== song) {
         $.ajax({
@@ -2058,7 +2058,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       e.preventDefault();
     });
   };
-  CUSTOM.resources.lyrics.callback.push(init_lyrics);
+  window.CUSTOM.resources.lyrics.callback.push(init_lyrics);
 
   var init_options = function () {
     logfn();
@@ -2161,8 +2161,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       },
       rank: elem.data("rank"),
       leader: elem.data("leader") || false,
-      icon: elem.data("icon") || false,
-      afk: elem.data("afk") || false
+      icon: elem.data("icon") || false
     }
   };
 
@@ -2218,8 +2217,8 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
         get_joined().forEach(Callbacks.addUser);
         renderStars();
       };
-      if (null === CUSTOM.resources.stars.data) {
-        CUSTOM.resources.stars.callback.push(handler);
+      if (null === window.CUSTOM.resources.stars.data) {
+        window.CUSTOM.resources.stars.callback.push(handler);
         loadData();
       } else {
         handler();
@@ -2228,14 +2227,14 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
 
     registerCallback("setLeader", function (event, original) {
       original(event);
-      if (null !== CUSTOM.resources.stars.data) {
+      if (null !== window.CUSTOM.resources.stars.data) {
         renderStars();
       }
     });
 
     registerCallback("setUserRank", function (event, original) {
       original(event);
-      if (null !== CUSTOM.resources.stars.data) {
+      if (null !== window.CUSTOM.resources.stars.data) {
         renderStars();
       }
     });
@@ -2250,7 +2249,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       renderStars();
       userlist_profile(findUserlistItem(e.name));
 
-      CUSTOM.userstats[ e.name ] = new Date().getTime();
+      window.CUSTOM.userstats[ e.name ] = new Date().getTime();
       update_index(2);
     });
 
@@ -2259,7 +2258,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       addChatMessage(getIntroFromName(e.name, -1));
       renderStars();
 
-      CUSTOM.userstats[ e.name ] = new Date().getTime();
+      window.CUSTOM.userstats[ e.name ] = new Date().getTime();
       update_index(2);
     });
 
@@ -2268,7 +2267,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       if (0 === data.msg.indexOf("$star") || 0 === data.msg.indexOf("$setstar")) {
         loadData();
       }
-      CUSTOM.userstats[ data.username ] = data.time;
+      window.CUSTOM.userstats[ data.username ] = data.time;
       update_index(2);
     });
 
@@ -2334,7 +2333,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       return UstreamPlayer.__super__.load.call(this, t);
     };
 
-    if (!CUSTOM.media_type || "tw" === CUSTOM.media_type) {
+    if (!window.CUSTOM.media_type || "tw" === window.CUSTOM.media_type) {
       PLAYER.mediaType = "";
       PLAYER.mediaId = "";
       socket.emit("playerReady");
@@ -2344,7 +2343,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
   var update_awards = function () {
     logfn();
 
-    if (!CUSTOM.resources.awards.data) {
+    if (!window.CUSTOM.resources.awards.data) {
       return;
     }
 
@@ -2355,12 +2354,12 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     };
 
     var newtag = $("<style id='ring_css'></style>");
-    newtag.html($.map(CUSTOM.resources.awards.data, render_ring_css_single).reduce(function (a, b) {
+    newtag.html($.map(window.CUSTOM.resources.awards.data, render_ring_css_single).reduce(function (a, b) {
       return a + b
     }));
     $("head").append(newtag);
   };
-  CUSTOM.resources.awards.callback.push(update_awards);
+  window.CUSTOM.resources.awards.callback.push(update_awards);
 
   var init_colorpicker = function () {
     logfn();
@@ -2376,7 +2375,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
       el.click(function (e) {
         e.preventDefault();
 
-        CUSTOM.chatcolor = color;
+        window.CUSTOM.chatcolor = color;
         if (color) {
           $("#chatline")[ 0 ].style.setProperty("color", color, "important");
         } else {
@@ -2481,11 +2480,11 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     init_nice_navbar();
     init_colorpicker();
 
-    CUSTOM.init_done = true;
+    window.CUSTOM.init_done = true;
     init_request_notification();
   };
 
-  if (false === CUSTOM.init_done) {
+  if (false === window.CUSTOM.init_done) {
     console.info("Initializing for first time");
     init_once();
   } else {
@@ -2494,7 +2493,7 @@ if ("undefined" === typeof (CUSTOM)) CUSTOM = {
     init_request_notification();
   }
 
-  if (true === CUSTOM.chat_only) {
+  if (true === window.CUSTOM.chat_only) {
     chatOnly();
   }
 })();
