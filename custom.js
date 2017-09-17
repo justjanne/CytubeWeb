@@ -116,6 +116,8 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
       "default": false
     }, "snow": {
       "displayname": "Show Snow", "type": "toggle", "names": [ "", "" ], "values": [ false, true ], "default": false
+    }, "titles": {
+      "displayname": "Show Titles", "type": "toggle", "names": [ "", "" ], "values": [ false, true ], "default": true
     }, "banner": {
       "displayname": "Show Banner", "type": "toggle", "names": [ "", "" ], "values": [ false, true ], "default": false
     }, "pmbar_unfocus": {
@@ -2144,6 +2146,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     renderCountdown();
     update_clock();
     set_body_class("snow", get_option("snow"));
+    set_body_class("titles", get_option("titles"));
     set_body_class("banner", get_option("banner"));
   };
   externalScripts[ 1 ].callback.push(apply_options);
