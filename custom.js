@@ -46,6 +46,11 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
   } else {
     path = "https://lithium.kuschku.de/stream/"
   }
+  
+  
+  if ("#chatonly" === window.location.hash) {
+    window.CUSTOM.chat_only = true;
+  }
 
   var logfn = function () {
     //if (window.CUSTOM.debug) console.log("%o %s",logfn.caller,
