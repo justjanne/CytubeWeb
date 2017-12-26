@@ -45,8 +45,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     window.CUSTOM.debug = true;
   } else {
     path = "https://lithium.kuschku.de/stream/"
-  }
-  
+  }  
   
   if ("#chatonly" === window.location.hash) {
     window.CUSTOM.chat_only = true;
@@ -2429,6 +2428,10 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
 
   var init = function () {
     logfn();
+    
+    if ("#emotefix" === window.location.hash) {
+      CHANNEL.emotes = CHANNEL.emotes.map(it => { return { name: it.name, regex: it.regex, source: it.source, image: it.image.replace('https://i.imgur.com/', 'https://lithium.kuschku.de/emotes/') }; })
+    }
 
     loadData();
     init_options();
