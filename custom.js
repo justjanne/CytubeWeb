@@ -106,6 +106,12 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
       "names": [ "", "" ],
       "values": [ false, true ],
       "default": false
+    }, "nocolorfilters": {
+      "displayname": "Turn off colors for filters (for example Anna/Elsa)",
+      "type": "toggle",
+      "names": [ "", "" ],
+      "values": [ false, true ],
+      "default": false
     }, "integrated_profile": {
       "displayname": "Integrate Userprofile with Dropdown",
       "type": "toggle",
@@ -119,11 +125,23 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
       "values": [ false, true ],
       "default": false
     }, "snow": {
-      "displayname": "Show Snow", "type": "toggle", "names": [ "", "" ], "values": [ false, true ], "default": false
+      "displayname": "Show Snow",
+      "type": "toggle",
+      "names": [ "", "" ],
+      "values": [ false, true ],
+      "default": false
     }, "titles": {
-      "displayname": "Show Titles", "type": "toggle", "names": [ "", "" ], "values": [ false, true ], "default": true
+      "displayname": "Show Titles",
+      "type": "toggle",
+      "names": [ "", "" ],
+      "values": [ false, true ],
+      "default": true
     }, "banner": {
-      "displayname": "Show Banner", "type": "toggle", "names": [ "", "" ], "values": [ false, true ], "default": false
+      "displayname": "Show Banner",
+      "type": "toggle",
+      "names": [ "", "" ],
+      "values": [ false, true ],
+      "default": false
     }, "pmbar_unfocus": {
       "displayname": "Hide PM windows without new PMs when typing in chatbar",
       "type": "toggle",
@@ -2111,6 +2129,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     set_body_class("emote_disable", get_option("emote_disable"));
     set_body_class("intro_disable", get_option("intro_disable"));
     set_body_class("hideafkicons", get_option("hideafkicons"));
+    set_body_class("nocolorfilters", get_option("nocolorfilters"));
     set_body_class("large-chat", get_option("large-chat"));
     set_body_class("nice_navbar", get_option("nice_navbar"));
     display_button("emote-disable", get_option("emote_disable"));
