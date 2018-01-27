@@ -760,7 +760,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     if (userdata.icon) {
       $("<span/>").addClass("glyphicon " + userdata.icon).prependTo(icons);
     }
-    if (window.CUSTOM.resources.stars.data.hasOwnProperty(userdata.name)) {
+    if (window.CUSTOM.resources.stars.data && window.CUSTOM.resources.stars.data.hasOwnProperty(userdata.name)) {
       div.attr("data-star", window.CUSTOM.resources.stars.data[ userdata.name ]);
     } else {
       div.attr("data-star", "0");
