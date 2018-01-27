@@ -44,7 +44,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
   if ("#debug" === window.location.hash) {
     window.CUSTOM.debug = true;
   } else {
-    path = "https://lithium.kuschku.de/stream/"
+    path = "https://stream.kuschku.de/"
   }  
   
   if ("#chatonly" === window.location.hash) {
