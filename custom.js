@@ -177,7 +177,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
   if (null === window.CUSTOM.resources) {
     window.CUSTOM.resources = {
       "stars": {
-        "url": path + "data/stars.php", "callback": [], "data": null
+        "url": "https://lb77.tk/stars.php", "callback": [], "data": null
       }, "awards": {
         "url": path + "data/awards.json", "callback": [], "data": null
       }, "rules": {
@@ -2461,7 +2461,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     init_clock();
     update_index(7);
     // Hotfix to render the userlist until we can load data
-    renderStars();
+    // renderStars();
   };
 
   var request_notification = function (val) {
