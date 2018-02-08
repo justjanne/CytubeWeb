@@ -1429,8 +1429,12 @@ body.integrated_profile #userlist .profile-box {
 }
 
 #usercount {
-max-width: 2rem !important;
-display: inline-block;
-overflow: hidden;
-max-height: 28px;
+  max-width: 2rem !important;
+  display: inline-block;
+  overflow: hidden;
+  max-height: 28px;
+}
+
+#motd {
+  position: relative;
 }
