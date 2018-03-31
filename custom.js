@@ -1948,7 +1948,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     $("#chatheader").append('<ul id="more-opts" class="dropdown-menu"></ul>');
     $("#more-opts").hide();
 
-    $('#customcontrols').prepend('<button id="schedulebtn" title="Schedule" class="schedulebtn btn btn-sm btn-default">Nothing scheduled</button>').button();
+    $('#customcontrols').prepend('<button title="Schedule" class="schedulebtn btn btn-sm btn-default">Nothing scheduled</button>').button();
     $('#customcontrols').prepend('<button id="settingsbtn" title="Settings" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-tasks"></span>&nbsp;</button>').button();
     $('#customcontrols').prepend('<button id="ruleslistbtn" title="Rules List" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-tower"></span>&nbsp;</button>').button();
     $('#customcontrols').prepend('<button id="lyricsbtn" title="Lyrics" class="btn btn-sm btn-default" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span></button>').button();
@@ -2500,6 +2500,9 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
 
   var init_once = function () {
     logfn();
+    
+    // FIXME: Ugly workaround until the motd can be changed
+    $("#schedulebtn").addClass("schedulebtn")
 
     init_overloads();
     init();
