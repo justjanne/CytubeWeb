@@ -1908,7 +1908,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
 
     var apply = function (text) {
       $("#btn_schedule").html(text);
-      $("#schedulebtn").html(text);
+      $(".schedulebtn").html(text);
     };
 
     var time = new Date().getTime();
@@ -1948,13 +1948,13 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     $("#chatheader").append('<ul id="more-opts" class="dropdown-menu"></ul>');
     $("#more-opts").hide();
 
-    $('#customcontrols').prepend('<button id="schedulebtn" title="Schedule" class="btn btn-sm btn-default">Nothing scheduled</button>').button();
+    $('#customcontrols').prepend('<button id="schedulebtn" title="Schedule" class="schedulebtn btn btn-sm btn-default">Nothing scheduled</button>').button();
     $('#customcontrols').prepend('<button id="settingsbtn" title="Settings" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-tasks"></span>&nbsp;</button>').button();
     $('#customcontrols').prepend('<button id="ruleslistbtn" title="Rules List" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-tower"></span>&nbsp;</button>').button();
     $('#customcontrols').prepend('<button id="lyricsbtn" title="Lyrics" class="btn btn-sm btn-default" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span></button>').button();
     $('#customcontrols').prepend('<button id="emotelistbtn" title="Emote List" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-picture"></span>&nbsp;</button>').button();
 
-    $("#schedulebtn").click(function () {
+    $(".schedulebtn").click(function () {
       schedule.show();
     });
     add_button("schedule", "Schedule", function () {
