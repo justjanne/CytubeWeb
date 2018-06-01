@@ -2376,7 +2376,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     $("#ring_css").unbind().remove();
 
     var render_ring_css_single = function (url, name) {
-      return "[data-name=" + name + "] > span:first-child:before {content: url('" + url + "');}\n";
+      return "[data-name=\"" + name + "\"] > span:first-child:before {content: url('" + url + "');}\n";
     };
 
     var newtag = $("<style id='ring_css'></style>");
