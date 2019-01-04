@@ -2448,9 +2448,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
   var init = function () {
     logfn();
     
-    if ("#emotefix" === window.location.hash) {
-      CHANNEL.emotes = CHANNEL.emotes.map(it => { return { name: it.name, regex: it.regex, source: it.source, image: it.image.replace('https://i.imgur.com/', 'https://lithium.kuschku.de/emotes/') }; })
-    }
+    CHANNEL.emotes = CHANNEL.emotes.map(it => { return { name: it.name, regex: it.regex, source: it.source, image: it.image.replace('https://lithium.kuschku.de/', 'https://stream.kuschku.de/emotes/') }; })
 
     loadData();
     init_options();
