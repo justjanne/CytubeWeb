@@ -2458,8 +2458,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     init_chatsizer();
     init_clock();
     update_index(7);
-    // Hotfix to render the userlist until we can load data
-    // renderStars();
+    renderStars();
   };
 
   var request_notification = function (val) {
