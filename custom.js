@@ -1096,6 +1096,17 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     }
     return data;
   };
+  
+  var praise_macro = function(data) {
+    if (data.meta.modflair >= 3) {
+      // Unsure if this is relevant now but it was in the original praise macro
+      let fixed_imgs = data.msg.slice(7).replace(/<img.*title=\"(.*)\">/g, "$1");
+      // Process emotes to appear properly
+      let fixed_emotes = fixed_imgs.replace(/<span.*class=\"emote-fallback\">(.*)<\/span>/g, " ");
+      // Prepend zero-width space as hack to prevent command abuse
+      socket.emit("chatMsg", {'msg': '\u200B' + fixed_emotes});
+		}
+  }
 
   var init_timeDisplay = function () {
     logfn();
@@ -2292,6 +2303,9 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
       original(process_msg(data));
       if (0 === data.msg.indexOf("$star") || 0 === data.msg.indexOf("$setstar")) {
         loadData();
+      }
+      if (data.msg.toLowerCase().startsWith("praise ")) {
+        praise_macro(data);
       }
       window.CUSTOM.userstats[ data.username ] = data.time;
       update_index(2);
