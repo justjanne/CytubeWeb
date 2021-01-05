@@ -44,7 +44,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
   if ("#debug" === window.location.hash) {
     window.CUSTOM.debug = true;
   } else {
-    path = "https://lb77.tk/"
+    path = "https://lb77.tk/CytubeWeb/"
   }  
   
   if ("#chatonly" === window.location.hash) {
