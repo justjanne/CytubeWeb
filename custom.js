@@ -44,7 +44,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
   if ("#debug" === window.location.hash) {
     window.CUSTOM.debug = true;
   } else {
-    path = "https://stream.kuschku.de/"
+    path = "https://lb77.tk/"
   }  
   
   if ("#chatonly" === window.location.hash) {
@@ -173,11 +173,11 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     }
   };
 
-  // Ressources
+  // Resources
   if (null === window.CUSTOM.resources) {
     window.CUSTOM.resources = {
       "stars": {
-        "url": "https://lb77.tk/stars.php", "callback": [], "data": null
+        "url": path + "data/stars.php", "callback": [], "data": null
       }, "awards": {
         "url": path + "data/awards.json", "callback": [], "data": null
       }, "rules": {
@@ -198,17 +198,14 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     };
   }
 
-  var externalScripts = [ {
-    "type": "css", "url": path + "custom.css", "callback": []
-  }, {
-    "type": "js", "url": path + "moment.js", "callback": []
-  }, {
-    "type": "css", "url": path + "katex.min.css", "callback": []
-  }, {
-    "type": "js", "url": path + "katex.min.js", "callback": []
-  }, {
-    "type": "js", "url": path + "caret.min.js", "callback": []
-  } ];
+  var externalScripts = [
+    {"type": "css", "url": path + "custom.css", "callback": []},
+    {"type": "css", "url": path + "katex.min.css", "callback": []},
+    {"type": "js", "url": path + "moment.js", "callback": []},
+    {"type": "js", "url": path + "katex.min.js", "callback": []},
+    {"type": "js", "url": path + "caret.min.js", "callback": []},
+    {"type": "js", "url": path + "/components/ytchat.js", "callback": []}
+  ];
 
   var runEveryMinute = function (callback) {
     logfn();
@@ -849,9 +846,6 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
 
     $.each($('.userlist_item'), function (key, value) {
       var elem = $(value);
-      formatUserlistItem(elem);
-    });
-  };
   window.CUSTOM.resources.stars.callback.push(renderStars);
 
   var getIntroFromName = function (name, count) {
@@ -1049,8 +1043,8 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
       var escape = "​";
 
       if (msg.msg.startsWith(escape + "i" + escape)) {
-        var username = msg.msg.substr((escape + "i" + escape).length, msg.msg.indexOf(":") -
-                                                                      (escape + "i" + escape).length);
+        var username = msg.msg.substr((escape + "i" + escape).length,
+          msg.msg.indexOf(":") - (escape + "i" + escape).length);
         username = $("<p>").html(username).text();
         return {
           username: username,
@@ -1108,6 +1102,24 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
 		}
   }
 
+  var init_ytchat = async function() {
+    let ytchat = new YTChat();
+    let init_ytchat_btn = $("<button>YT Live Chat</button>")
+      .attr({
+        "id": "init_ytchat_btn",
+        "class": "btn btn-sm btn-default",
+        "title": "Toggle Live Chat (YT Vids Only)"
+      })
+      .click(function() {
+        let res = ytchat.toggle("#videowrap");
+        if (!res) socket.emit("errorMsg", {
+          msg: "Video has no Youtube Chat Replay!"
+        });
+      });
+
+      $("#videocontrols").append(init_ytchat_btn);
+  };
+
   var init_timeDisplay = function () {
     logfn();
 
@@ -1116,8 +1128,9 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     var time_display_interval;
 
     time_display_update = function () {
-      var t = time_display_time.paused ? time_display_time.raw : (new Date()).getTime() / 1000 +
-                                                                 time_display_time.ofs;
+      var t = time_display_time.paused
+        ? time_display_time.raw
+        : (new Date()).getTime() / 1000 + time_display_time.ofs;
       t = Math.round(t);
       var s = t % 60;
       t = Math.floor(t / 60);
@@ -1582,8 +1595,9 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
             if (t.trim()) {
               var a = {};
               USEROPTS.adminhat && 255 <= CLIENT.rank ? t = '/a ' + t : USEROPTS.modhat &&
-                                                                        CLIENT.rank >= Rank.Moderator &&
-                                                                        (a.modflair = CLIENT.rank);
+              CLIENT.rank >= Rank.Moderator &&
+              (a.modflair = CLIENT.rank);
+
               if (2 <= CLIENT.rank && 0 === t.indexOf('/m ')) {
                 a.modflair = CLIENT.rank;
                 t = t.substring(3)
@@ -2520,6 +2534,7 @@ if ("undefined" === typeof (window.CUSTOM)) window.CUSTOM = {
     loadExternal();
     process_msgbuffer();
     init_callbacks();
+    init_ytchat();
     init_timeDisplay();
     init_better_player();
     init_better_scroll();
